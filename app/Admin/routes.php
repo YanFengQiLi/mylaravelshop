@@ -25,4 +25,7 @@ Route::group([
     /******************** 会员管理 start ********************* */
     $router->resource('member/users', 'MemberController');
 
+    //  商品分类管理
+    $router->resource('category','CategoryController');
+
 });

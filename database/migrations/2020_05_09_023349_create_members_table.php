@@ -24,9 +24,10 @@ class CreateMembersTable extends Migration
             $table->string('password', 40)->comment('密码');
             $table->string('user_name', 40)->comment('姓名');
             $table->string('nick_name', 40)->comment('昵称');
-            $table->tinyInteger('sex')->default(1)->comment('性别');
+            $table->tinyInteger('sex')->default(1)->comment('性别 1-男 2-女');
             $table->integer('photo')->comment('头像');
-            $table->tinyInteger('status')->default(0)->comment('状态');
+            $table->tinyInteger('status')->default(1)->comment('状态 0-冻结 1-正常');
+            $table->unsignedInteger('integral')->default(0)->comment('积分');
             $table->timestamps();
             $table->softDeletes();
         });
