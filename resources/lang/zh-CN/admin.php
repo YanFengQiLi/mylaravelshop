@@ -204,7 +204,6 @@ return [
         'minlength' => ':attribute 字符长度不能少于 :min。',
         'maxlength' => ':attribute 字符长度不能超出 :max。',
     ],
-    //  菜单翻译
     'menu_titles' => [
         'index'         => '主页',
         'admin'         => '系统',
