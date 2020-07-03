@@ -1,17 +1,11 @@
 <?php
-/*
- * @Author: yan_feng_qi_li
- * @Date: 2020-06-10 09:18:29
- * @LastEditTime: 2020-06-10 14:10:19
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \mylaravel\resources\lang\zh-CN\member.php
- */
 return [
-    // labels是自定义标签翻译
+    // labels是自定义标签翻译(除了数据表字段)   可以是任何自定义内容
     'labels' => [
         // 这个是页面 title 翻译
         'Member' => '会员列表',
+        //  面包屑翻译,是根据路由匹配的  /member/users
+        'users' => '会员列表'
     ],
     // 表字段翻译
     'fields' => [
@@ -24,6 +18,7 @@ return [
         'photo' => '头像',
         'status' => '状态',
     ],
+    //  枚举选项翻译
     'options' => [
     ],
 ];

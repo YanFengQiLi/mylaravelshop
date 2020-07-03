@@ -39,4 +39,6 @@ class Order extends Model
         self::DELIVERED => '已发货',
         self::CONFIRMED_DELIVER => '已收货'
     ];
+
+    protected $table = 'orders';
 }

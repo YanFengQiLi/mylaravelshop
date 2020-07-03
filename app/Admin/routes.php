@@ -25,7 +25,15 @@ Route::group([
     /******************** 会员管理 start ********************* */
     $router->resource('member/users', 'MemberController');
 
+    $router->resource('member/integrals', 'MemberIntegralController');
+
+    //  优惠券管理
+    $router->resource('coupons', 'CouponCodeController');
+
     //  商品分类管理
     $router->resource('category','CategoryController');
 
+    /******************** 订单管理 start ********************* */
+    //  订单列表
+    $router->resource('order/order-list','OrderController');
 });
