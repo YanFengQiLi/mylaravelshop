@@ -76,7 +76,7 @@ class CouponCodeController extends AdminController
             $form->display('id');
             $form->text('name');
             $form->text('code');
-            $form->radio('type')->options(CouponCode::TPYE);
+            $form->radio('type')->options(\App\Models\CouponCode::COUPON_TYPE);
             $form->text('value');
             $form->text('total');
             $form->text('used');

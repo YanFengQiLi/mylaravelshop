@@ -11,7 +11,7 @@ class CouponCode extends Model
     protected $table = 'coupon_codes';
 
     //  券类型
-    const TYPE = [
+    const COUPON_TYPE = [
         'fixed' =>  '固定金额',
         'rate'  =>  '比例'
     ];
