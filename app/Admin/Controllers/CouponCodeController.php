@@ -7,6 +7,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
+use App\Models\CouponCode as CouponCodeModel;
 
 class CouponCodeController extends AdminController
 {
@@ -66,7 +67,9 @@ class CouponCodeController extends AdminController
     }
 
     /**
-     * Make a form builder.
+     * @author zhenhong~
+     *
+     * Form 表单
      *
      * @return Form
      */
@@ -74,19 +77,46 @@ class CouponCodeController extends AdminController
     {
         return Form::make(new CouponCode(), function (Form $form) {
             $form->display('id');
-            $form->text('name');
-            $form->text('code');
-            $form->radio('type')->options(\App\Models\CouponCode::COUPON_TYPE);
-            $form->text('value');
-            $form->text('total');
-            $form->text('used');
-            $form->text('min_amount');
-            $form->text('before_time');
-            $form->text('after_time');
-            $form->text('enable');
-
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->text('name')->required();
+            $form->text('code')->placeholder('不填时,系统则会自动生成')->rules(function ($form){
+                //  如果 id 不为空代表是编辑操作
+                if ($id = $form->model()->id) {
+                    //  此处使用 laravel 自带唯一性验证来做, unique:table(表名),column(字段名),except(记录ID),idColumn(主键名称)
+                    return 'nullable|unique:coupon_codes,code,'. $id . ',id';
+                }else {
+                    return 'nullable|unique:coupon_codes';
+                }
+            });
+            $form->radio('type')->options(CouponCodeModel::COUPON_TYPE)->rules('required',[
+                'required' => '请选择券类型'
+            ]);
+            $form->text('value')->rules(function ($form){
+                if ($form->model()->type === CouponCodeModel::TYPE_RATE){
+                    //  折扣类型为百比例: 必须是 1 ~ 99
+                    return 'required|numeric|between:1,99';
+                }else{
+                    //  折扣类型为固定金额: >= 0.01 即可
+                    return 'required|numeric|min:0.01';
+                }
+            },[
+                'required' => '请填写折扣',
+                'numeric' => '折扣必须为数字',
+                'between' => '比例券,折扣范围只能在1 ~ 99的数字',
+                'min' => '固定金额券,折扣最小为 0.01 元'
+            ]);
+            $form->number('total')->rules('required|numeric|min:0',[
+                'required' => '请填写券总量',
+                'numeric' => '券总量必须为数字',
+                'min' => '券总量最小为0',
+            ]);
+            $form->text('min_amount')->rules('required|numeric|min:0', [
+                'required' => '请填写最低使用金额',
+                'numeric' => '必须是数字',
+                'min' => '最低使用金额为 0.01 元'
+            ]);
+            $form->datetime('before_time', '开始时间')->format('YYYY-MM-DD HH:mm');
+            $form->datetime('after_time', '结束时间')->format('YYYY-MM-DD HH:mm');
+            $form->switch('enable', '是否启用');
         });
     }
 }
