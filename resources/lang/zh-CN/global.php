@@ -1,7 +1,5 @@
 <?php
-/**
- *  控制器公共语言包
- */
+
 return [
     'fields' => [
         'id'                    => 'ID',
@@ -31,9 +29,6 @@ return [
         'create'   => '创建',
         'root'     => '顶级',
         'scaffold' => '代码生成器',
-        //  定义公共的面包屑导航翻译
-        'member' => '会员管理',
-        'order' => '订单管理'
     ],
 
     'options' => [
