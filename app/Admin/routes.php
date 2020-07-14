@@ -32,6 +32,8 @@ Route::group([
 
     //  商品分类管理
     $router->resource('category','CategoryController');
+    //  获取商品分类的顶级分类
+    $router->get('api/grand-parent-category/{level}', 'CategoryController@getGrandParentCategory');
 
     /******************** 订单管理 start ********************* */
     //  订单列表

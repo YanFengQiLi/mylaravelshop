@@ -10,6 +10,7 @@ use Dcat\Admin\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 use App\Models\Category as CategoryModel;
 use Dcat\Admin\Tree;
+use Illuminate\Http\Request;
 
 /**
  * @author zhenhong~
@@ -70,5 +71,20 @@ class CategoryController extends AdminController
             $form->number('order')->min(0);
             $form->text('title')->required();
         });
+    }
+
+    /**
+     * 获取商品的祖父级分类
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getGrandParentCategory($level, Request $request)
+    {
+        $q = $request->get('q');
+
+        return CategoryModel::where('title', 'like', "%$q%")
+            ->orderBy('order','asc')
+            ->paginate(null, ['id', 'title AS text']);
     }
 }

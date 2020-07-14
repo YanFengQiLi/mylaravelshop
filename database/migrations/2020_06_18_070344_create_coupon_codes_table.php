@@ -21,12 +21,14 @@ class CreateCouponCodesTable extends Migration
             $table->string('name')->comment('优惠券名称');
             $table->string('code')->unique()->comment('优惠券码');
             $table->string('type')->comment('券类型');
+            $table->string('use_type',30)->comment('使用范围');
+            $table->text('use_type_id')->nullable()->comment('特定商品祖父级ID数组');
             $table->string('value')->comment('折扣');
             $table->unsignedInteger('total')->comment('券总量');
             $table->unsignedInteger('used')->default(0)->comment('券使用量');
             $table->decimal('min_amount',10,2)->comment('最低使用金额');
-            $table->dateTime('before_time')->comment('开始时间');
-            $table->dateTime('after_time')->comment('结束时间');
+            $table->dateTime('before_time')->nullable()->comment('开始时间');
+            $table->dateTime('after_time')->nullable()->comment('结束时间');
             $table->boolean('enable')->comment('是否启动 1-是 0-否');
             $table->timestamps();
         });

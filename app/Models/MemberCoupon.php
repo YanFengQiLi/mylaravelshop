@@ -7,6 +7,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\MemberCoupon
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCoupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCoupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCoupon query()
+ * @mixin \Eloquent
+ */
 class MemberCoupon extends Model
 {
     protected $table = 'member_coupons';

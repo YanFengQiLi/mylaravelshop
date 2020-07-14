@@ -168,6 +168,8 @@ return [
          */
         //  配合 Chrome 浏览器下同名插件的调试工具
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
+        //  laravel-ide 提示工具
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...
