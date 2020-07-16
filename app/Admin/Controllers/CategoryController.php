@@ -4,13 +4,11 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Category;
 use Dcat\Admin\Form;
-use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
-use Dcat\Admin\Layout\Content;
 use App\Models\Category as CategoryModel;
-use Dcat\Admin\Tree;
 use Illuminate\Http\Request;
+use Dcat\Admin\Grid;
 
 /**
  * @author zhenhong~
@@ -21,19 +19,26 @@ use Illuminate\Http\Request;
  */
 class CategoryController extends AdminController
 {
-    public function index(Content $content)
+
+    protected function grid()
     {
-        return $content->header('商品分类')
-            ->body(function (Row $row) {
-                $tree = new Tree(new Category);
+        return Grid::make(new Category(), function (Grid $grid) {
+            $grid->id('ID')->bold()->sortable();
+            $grid->title->tree();
+            $grid->order;
 
-                //  更改行数据显示
-                $tree->branch(function ($branch) {
-                    return $branch['title'];
-                });
+            $grid->created_at;
+            $grid->updated_at->sortable();
 
-                $row->column(12, $tree);
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->like('title');
             });
+
+            $grid->disableViewButton();
+            $grid->disableEditButton();
+
+            $grid->disableQuickEditButton(false);
+        });
     }
 
     /**
@@ -57,34 +62,52 @@ class CategoryController extends AdminController
     /**
      * Make a form builder.
      *
+     * 注意, 若想直接使用 dcat 无限极分类下拉组件,则使用:
+     *      看源码 MenuController (108行) 和 ModelTree 的(292行) 得知 CategoryModel::selectOptions();
+     *
      * @return Form
      */
     protected function form()
     {
-        $model = CategoryModel::class;
-
-        //  看源码 MenuController (108行) 和 ModelTree 的(292行) 得知
-        return Form::make(new Category(), function (Form $form) use ($model) {
-            $form->select('parent_id', '选择分类')->options(function () use ($model){
-                return $model::selectOptions();
-            })->required();
+        return Form::make(new Category(), function (Form $form) {
+            $form->select('parent_id', '选择分类')->options('api/grand-category');
             $form->number('order')->min(0);
             $form->text('title')->required();
         });
     }
 
     /**
-     * 获取商品的祖父级分类
+     * 根据层级深度,查询分类
      *
+     * @param $level
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getGrandParentCategory($level, Request $request)
+    public function getDeepCategory($level, Request $request)
     {
         $q = $request->get('q');
 
         return CategoryModel::where('title', 'like', "%$q%")
+            ->where('deep', $level)
             ->orderBy('order','asc')
             ->paginate(null, ['id', 'title AS text']);
+    }
+
+
+    /**
+     * 获取商品顶级分类
+     *
+     * @return array
+     */
+    public function getGrandCategory()
+    {
+        $options = CategoryModel::where('parent_id',0)->get([
+            'id', 'title AS text'
+        ]);
+
+        return collect($options)->prepend([
+            'id' => 0,
+            'text' => '顶级分类'
+        ],'0')->all();
     }
 }

@@ -22,6 +22,7 @@ class Category extends EloquentRepository implements TreeRepository
         return $this->getDeep($tree);
     }
 
+
     //  给树形结构加层级深度
     protected function getDeep(&$tree, $deep = 1)
     {
