@@ -100,22 +100,25 @@ class CouponCodeController extends AdminController
                 } else {
                     return 'nullable|unique:coupon_codes';
                 }
-            },[
+            }, [
                 'unique' => '优惠券码必须是唯一的'
             ]);
             //  字段动态渲染
             $form->radio('use_type')
-                ->when(CouponCodeModel::USE_GRAND, function (Form $form){
-                    $form->multipleSelect('use_type_id', '商品分类')->options(Category::class)->ajax('api/grand-parent-category/0');
-                })
-                ->when(CouponCodeModel::USE_PARENT, function (Form $form){
-                    $form->multipleSelect('use_type_id', '商品分类')->options(Category::class)->ajax('api/grand-parent-category/1');
-                })
-                ->when(CouponCodeModel::USE_SON, function (Form $form){
-                    $form->multipleSelect('use_type_id', '商品分类')->options(Category::class)->ajax('api/grand-parent-category/2');
+                ->when(CouponCodeModel::USE_SPECIAL, function (Form $form) {
+                    $form->tree('use_type_id', '选择分类')
+                        ->nodes(function () {
+                            $category = new Category();
+                            return $category->allNodes();
+                        })
+//                        ->customFormat(function ($value) {
+//                            return $value ? array_column($value, 'id') : [];
+//                        })
+                        ->setTitleColumn('title')
+                        ->disableFilterParents();
                 })
                 ->options(CouponCodeModel::USE_TYPE)
-                ->default(1);
+                ->default(CouponCodeModel::USE_ALL);
             $form->radio('type')->options(CouponCodeModel::COUPON_TYPE)->rules('required', [
                 'required' => '请选择券类型'
             ]);
@@ -162,3 +165,4 @@ class CouponCodeController extends AdminController
 
     }
 }
+

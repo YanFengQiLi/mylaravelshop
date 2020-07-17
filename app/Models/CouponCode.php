@@ -52,9 +52,7 @@ class CouponCode extends Model
 
     // 定义优惠券的使用范围
     const USE_ALL = 'all';
-    const USE_GRAND = 'grand';
-    const USE_PARENT = 'parent';
-    const USE_SON = 'son';
+    const USE_SPECIAL = 'special';
 
 
     //  券类型
@@ -66,9 +64,7 @@ class CouponCode extends Model
     //  优惠券使用范围
     const USE_TYPE = [
         self::USE_ALL => '全品类',
-        self::USE_GRAND => '顶级类目商品',
-        self::USE_PARENT => '二级类目',
-        self::USE_SON => '指定商品'
+        self::USE_SPECIAL => '指定商品分类'
     ];
 
     protected $appends = ['value_show'];

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\AddTreeSonNode;
 use App\Admin\Repositories\Category;
 use Dcat\Admin\Form;
 use Dcat\Admin\Show;
@@ -9,6 +10,9 @@ use Dcat\Admin\Controllers\AdminController;
 use App\Models\Category as CategoryModel;
 use Illuminate\Http\Request;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Layout\Content;
+use Dcat\Admin\Tree;
+use Dcat\Admin\Layout\Row;
 
 /**
  * @author zhenhong~
@@ -19,26 +23,18 @@ use Dcat\Admin\Grid;
  */
 class CategoryController extends AdminController
 {
-
-    protected function grid()
+    public function index(Content $content)
     {
-        return Grid::make(new Category(), function (Grid $grid) {
-            $grid->id('ID')->bold()->sortable();
-            $grid->title->tree();
-            $grid->order;
+        return $content->header('树状模型')
+            ->body(function (Row $row) {
+                $tree = new Tree(new Category);
 
-            $grid->created_at;
-            $grid->updated_at->sortable();
+                $tree->branch(function ($branch) {
+                    return "{$branch['title']}";
+                });
 
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->like('title');
+                $row->column(12, $tree);
             });
-
-            $grid->disableViewButton();
-            $grid->disableEditButton();
-
-            $grid->disableQuickEditButton(false);
-        });
     }
 
     /**
@@ -70,7 +66,9 @@ class CategoryController extends AdminController
     protected function form()
     {
         return Form::make(new Category(), function (Form $form) {
-            $form->select('parent_id', '选择分类')->options('api/grand-category');
+            $form->select('parent_id', '选择分类')->options(function () {
+                return CategoryModel::selectOptions();
+            });
             $form->number('order')->min(0);
             $form->text('title')->required();
         });

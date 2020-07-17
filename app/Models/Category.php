@@ -37,4 +37,6 @@ class Category extends Model
     use ModelTree;
 
     protected $table = 'categories';
+
+
 }
