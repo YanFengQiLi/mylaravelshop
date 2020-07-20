@@ -90,7 +90,6 @@ class CouponCodeController extends AdminController
     protected function form()
     {
         return Form::make(new CouponCode(), function (Form $form) {
-            $form->display('id');
             $form->text('name')->required();
             $form->text('code')->placeholder('不填时,系统则会自动生成')->rules(function ($form) {
                 //  如果 id 不为空代表是编辑操作
@@ -106,14 +105,12 @@ class CouponCodeController extends AdminController
             //  字段动态渲染
             $form->radio('use_type')
                 ->when(CouponCodeModel::USE_SPECIAL, function (Form $form) {
+                    //  树形选择器,提交的数据为数组
                     $form->tree('use_type_id', '选择分类')
                         ->nodes(function () {
                             $category = new Category();
                             return $category->allNodes();
                         })
-//                        ->customFormat(function ($value) {
-//                            return $value ? array_column($value, 'id') : [];
-//                        })
                         ->setTitleColumn('title')
                         ->disableFilterParents();
                 })
@@ -160,7 +157,7 @@ class CouponCodeController extends AdminController
                 }
             });
 
-            $form->title('<span style="color: red">注: 不限制使用时间,开始和结束时间都不设置即可</span>');
+            $form->title('<span style="color: red">注: 不限制使用时间,开始和结束时间不设置即可</span>');
         });
 
     }

@@ -33,6 +33,8 @@ Route::group([
 
     //  商品分类管理
     $router->resource('category','CategoryController');
+    //  商品管理
+    $router->resource('products', 'ProductController');
 
     /******************** select api接口 ********************* */
     $router->group(['prefix' => 'api'], function ($router){

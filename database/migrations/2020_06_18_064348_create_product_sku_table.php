@@ -23,6 +23,8 @@ class CreateProductSkuTable extends Migration
             $table->decimal('price', 10,2)->comment('sku价格');
             $table->unsignedInteger('stock')->comment('sku库存');
             $table->unsignedInteger('product_id')->comment('商品ID');
+            $table->text('img')->comment('sku图片');
+            $table->text('img_icon')->comment('sku小图片');
             $table->timestamps();
         });
     }

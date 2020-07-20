@@ -225,8 +225,8 @@ return [
 
         // Image and file upload path under the disk above.
         'directory' => [
-            'image' => 'images',
-            'file'  => 'files',
+            'image' => 'images',   //   图片上传目录
+            'file'  => 'files',    //   文件上传目录
         ],
     ],
 

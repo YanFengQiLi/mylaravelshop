@@ -170,6 +170,10 @@ return [
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
         //  laravel-ide 提示工具
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        //  本地图片剪裁
+        Intervention\Image\ImageServiceProvider::class,
+        //  七牛云储存
+        zgldh\QiniuStorage\QiniuFilesystemServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -233,6 +237,8 @@ return [
 
         //  Clockwork 门面类
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
+        //  Intervention\Image 门面类
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

@@ -94,4 +94,9 @@ class CouponCode extends Model
 
         return $str;
     }
+
+    public function setUseTypeIdAttribute($value)
+    {
+        $this->attributes['use_type_id'] = implode(',', $value);
+    }
 }
