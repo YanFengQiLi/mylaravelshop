@@ -4,8 +4,8 @@ return [
         'ProductSku' => 'ProductSku',
     ],
     'fields' => [
-        'title' => '名称',
-        'description' => '描述',
+        'title' => '属性名称',
+        'description' => '属性描述',
         'price' => '价格',
         'stock' => '库存',
         'product_id' => '商品ID',

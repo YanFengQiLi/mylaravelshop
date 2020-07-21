@@ -89,4 +89,28 @@ return [
         ],
     ],
 
+    //  图片格式配置
+    'images_config' => [
+        //  允许上传图片的 mime 类型,多个用逗号分隔
+        'mime_type' => 'jpg,png,gif,jpeg',
+        //  单个图片上传大小 单位KB
+        'max_size' => 2 * 1024,
+    ],
+
+    //  文件格式配置
+    'file_config' => [
+        //  允许上传文件的 mime 类型, 多个用逗号分隔
+        'mine_type' => 'jpg,png,gif,jpeg,ppt,doc,docx,xls,xlsx,pdf',
+        //  单个文件上传大小 单位KB
+        'max_size' => 5 * 1024
+    ],
+
+    //  视频格式配置
+    'video_config' => [
+        //  视频文件的 mime 类型
+        'mime_type' => 'mp4',
+        //  单个文件上传大小 单位KB
+        'max_size' => 200 * 1024
+    ]
+
 ];

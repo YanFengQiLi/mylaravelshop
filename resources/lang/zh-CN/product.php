@@ -8,6 +8,7 @@ return [
         'title' => '商品名称',
         'description' => '商品描述',
         'image' => '商品封面图',
+        'pictures' => '商品轮播图',
         'on_sale' => '上架状态',
         'rating' => '商品评分',
         'sold_count' => '销量',
