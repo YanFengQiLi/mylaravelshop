@@ -13,6 +13,11 @@ class Product extends Model
         return $this->hasMany(ProductSku::class,'product_id','id');
     }
 
+    public function setPicturesAttribute($value)
+    {
+        $this->attributes['pictures'] = json_encode($value);
+    }
+
     public function getImage()
     {
         if (Str::contains($this->image, '//')) {

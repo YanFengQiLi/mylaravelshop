@@ -73,37 +73,28 @@ class CategoryController extends AdminController
     }
 
     /**
-     * 根据层级深度,查询分类
-     *
-     * @param $level
+     * 下拉菜单,联动获取商品分类
      * @param Request $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Support\Collection
      */
-    public function getDeepCategory($level, Request $request)
+    public function getCategory(Request $request)
     {
-        $q = $request->get('q');
+        $parentId = $request->get('q');
 
-        return CategoryModel::where('title', 'like', "%$q%")
-            ->where('deep', $level)
+        return CategoryModel::where('parent_id', $parentId)
             ->orderBy('order','asc')
-            ->paginate(null, ['id', 'title AS text']);
+            ->get(['id', 'title AS text']);
     }
 
 
     /**
      * 获取商品顶级分类
-     *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function getGrandCategory()
     {
-        $options = CategoryModel::where('parent_id',0)->get([
+        return CategoryModel::where('parent_id',0)->orderBy('order', 'asc')->get([
             'id', 'title AS text'
         ]);
-
-        return collect($options)->prepend([
-            'id' => 0,
-            'text' => '顶级分类'
-        ],'0')->all();
     }
 }

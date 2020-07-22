@@ -8,7 +8,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use Dcat\Admin\Traits\HasUploadedFile;
-use App\Models\Product as ProductModel;
+use Illuminate\Support\Arr;
 
 class ProductController extends AdminController
 {
@@ -24,7 +24,7 @@ class ProductController extends AdminController
         return Grid::make(new Product(), function (Grid $grid) {
             $grid->id->sortable();
             $grid->title;
-            $grid->image->image('',100,100);
+            $grid->image->image('', 100, 100);
             $grid->on_sale->using([0 => '下架', 1 => '上架'])->label([
                 0 => 'danger',
                 1 => 'success'
@@ -51,6 +51,7 @@ class ProductController extends AdminController
 
             $grid->disableDeleteButton();
             $grid->disableViewButton();
+            $grid->disableBatchActions();
         });
     }
 
@@ -90,6 +91,15 @@ class ProductController extends AdminController
 
         return Form::make($repository, function (Form $form) {
             $form->text('title')->required();
+            //  三级联动
+            $form->select('grand_id')->options('/api/grand-category')
+                ->load('parent_id', '/api/categories')
+                ->required();
+            $form->select('parent_id')
+                ->load('category_id', '/api/categories')
+                ->required();
+            $form->select('category_id')->required();
+
             $form->editor('description')->required();
             $form->image('image')->uniqueName()
                 ->accept(config('filesystems.images_config.mime_type'))
@@ -100,8 +110,10 @@ class ProductController extends AdminController
             $form->multipleImage('pictures')->uniqueName()
                 ->limit(5)
                 ->rules('required', [
-                'required' => '请上传' . admin_trans_field('image')
-            ]);;
+                    'required' => '请上传' . admin_trans_field('image')
+                ]);
+            //  必须设置此字段,否则在事件中保存不了
+            $form->hidden('concat_id');
             $form->switch('on_sale', '是否上架');
             $form->hasMany('sku', '添加商品属性', function (Form\NestedForm $form) {
                 $form->text('title', trans('product-sku.fields.title'))
@@ -130,15 +142,19 @@ class ProductController extends AdminController
             });
 
             $form->saving(function (Form $form) {
-                if (request()->has('sku') && !request()->has('_file_del_')){
+                $arr = Arr::only(request()->all(), ['grand_id', 'parent_id', 'category_id']);
+
+                $form->concat_id = implode(',', array_values($arr));
+
+                if (request()->has('sku') && !request()->has('_file_del_')) {
                     $sku = $form->input('sku');
                     //  将 sku 的最低价格设置为商品价格
-                    $min_price  = collect($sku)->where(Form::REMOVE_FLAG_NAME,0)->min('price') ?: 0;
+                    $min_price = collect($sku)->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
 
                     $form->price = $min_price;
-                }elseif (request()->has('_file_del_')){
+                } elseif (request()->has('_file_del_')) {
                     return;
-                }else{
+                } else {
                     return $form->error('请添加商品属性');
                 }
             });

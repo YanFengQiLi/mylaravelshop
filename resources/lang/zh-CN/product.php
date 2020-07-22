@@ -14,6 +14,9 @@ return [
         'sold_count' => '销量',
         'review_count' => '评论数',
         'price' => '价格',
+        'grand_id' => '顶级分类',
+        'parent_id' => '父级分类',
+        'category_id' => '子级分类',
     ],
     'options' => [
     ],

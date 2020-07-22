@@ -50,7 +50,18 @@ class CouponCodeController extends AdminController
 
                 $filter->between('after_time')->datetime(['format' => 'YYYY-MM-DD HH:mm:00']);
 
+                $filter->group('min_amount', function ($group){
+                    $group->gt('大于');
+                    $group->lt('小于');
+                    $group->nlt('大于等于');
+                    $group->ngt('小于等于');
+                    $group->equal('等于');
+                });
+
             });
+
+            $grid->disableDeleteButton();
+            $grid->disableBatchDelete();
         });
     }
 
