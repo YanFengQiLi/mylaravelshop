@@ -2,11 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\District;
 use App\Admin\Repositories\ProductTemplate;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
+use App\Models\ProductTemplate as ProductTemplateModel;
 
 class ProductTemplateController extends AdminController
 {
@@ -23,10 +25,10 @@ class ProductTemplateController extends AdminController
             $grid->type;
             $grid->created_at;
             $grid->updated_at->sortable();
-        
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-        
+
             });
         });
     }
@@ -59,8 +61,13 @@ class ProductTemplateController extends AdminController
         return Form::make(new ProductTemplate(), function (Form $form) {
             $form->display('id');
             $form->text('title');
-            $form->text('type');
-        
+            $form->select('type')
+            ->when(0,function (){
+
+            })
+            ->options(ProductTemplateModel::RULES)->default(1);
+
+
             $form->display('created_at');
             $form->display('updated_at');
         });
