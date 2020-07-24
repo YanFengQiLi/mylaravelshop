@@ -35,6 +35,8 @@ Route::group([
         $router->get('grand-category', 'CategoryController@getGrandCategory');
         //  商品分类联动接口
         $router->get('categories', 'CategoryController@getCategory');
+        //  获取省市区的顶级分类
+        $router->get('province', 'DistrictController@getProvince');
     });
     /******************** select api接口  end ********************* */
 
