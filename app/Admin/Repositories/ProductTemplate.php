@@ -16,7 +16,13 @@ class ProductTemplate extends EloquentRepository
      */
     protected $eloquentClass = Model::class;
 
-
+    /**
+     * 覆写保存方法
+     *
+     * @param Form $form
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public function store(Form $form)
     {
         // 获取待新增的数据
@@ -68,7 +74,13 @@ class ProductTemplate extends EloquentRepository
         }
     }
 
-
+    /**
+     * 覆写更新方法
+     *
+     * @param Form $form
+     * @return bool
+     * @throws \Exception
+     */
     public function update(Form $form)
     {
         // 获取待新增的数据
@@ -80,10 +92,11 @@ class ProductTemplate extends EloquentRepository
             //  获取当前要更新的模型
             $model = (new $this->eloquentClass)::find($attributes['id']);
 
-            $model->fill([
-                'title' => $attributes['title'],
-                'type' => $attributes['type']
-            ])->save();
+            $model->title = $attributes['title'];
+
+            $model->type = $attributes['type'];
+
+            $model->save();
 
             $type = $attributes['type'];
 
@@ -130,6 +143,7 @@ class ProductTemplate extends EloquentRepository
             return true;
         }catch (\Exception $exception){
             DB::rollBack();
+
             return false;
         }
     }
