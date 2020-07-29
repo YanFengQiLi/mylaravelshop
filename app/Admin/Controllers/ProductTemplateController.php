@@ -9,6 +9,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use App\Models\ProductTemplate as ProductTemplateModel;
+use Illuminate\Support\Arr;
 
 class ProductTemplateController extends AdminController
 {
@@ -19,7 +20,7 @@ class ProductTemplateController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new ProductTemplate(), function (Grid $grid) {
+        return Grid::make(new ProductTemplate('templateRule'), function (Grid $grid) {
             $grid->id->sortable();
             $grid->title;
             //  badge 内置了 color 的所有css属性
@@ -30,13 +31,40 @@ class ProductTemplateController extends AdminController
                 3 => 'blue',
                 4 => 'red'
             ]);
+            //  异步弹窗
+            $grid->column('templateRule.city','查看地区')->display(function (){
+                $district = new District();
+
+                $data = $district::getProvinceList();
+
+                $selected = explode(',' ,$this->row()['template_rule']['city']) ?: [];
+
+                $str = '';
+
+                foreach ($data as $val){
+                    if (in_array($val['id'], $selected)){
+                        $str .= ',' . $val['name'];
+                    }
+                }
+
+                $str = ltrim($str,',');
+
+                return $str ?: '全部';
+            })->explode()->label('orange');
+            $grid->status->switch('green');
             $grid->created_at;
             $grid->updated_at->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->like('title');
 
+                $filter->equal('type')->select(ProductTemplateModel::RULES);
+
+                $filter->in('templateRule.city', '选择省份')->multipleSelect('api/province');
             });
+
+            $grid->disableDeleteButton();
+            $grid->disableBatchDelete();
         });
     }
 
@@ -71,6 +99,7 @@ class ProductTemplateController extends AdminController
             $selected = $form->model()->template_rule['city'] ?: '';
             $form->hidden('id');
             $form->text('title')->rules('required',['required' => admin_trans_field('title').'必填']);
+            $form->switch('status');
             $form->select('type')
                 ->when(ProductTemplateModel::SPECIAL_FREE, function (Form $form) use ($district, $selected) {
                     $form->tree('city', '选择地区')

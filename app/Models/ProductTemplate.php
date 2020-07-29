@@ -10,7 +10,7 @@ class ProductTemplate extends Model
 
     protected $table = 'product_template';
 
-    protected $fillable = ['title', 'type'];
+    protected $fillable = ['title', 'type', 'status'];
 
     //  任何地区包邮
     const FREE = 0;

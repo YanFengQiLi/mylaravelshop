@@ -19,7 +19,8 @@ class CreateProductTemplateTable extends Migration
         Schema::create('product_template', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title')->comment('模板名称');
-            $table->unsignedTinyInteger('type')->comment('类型 0-自定义运费 1-包邮');
+            $table->unsignedTinyInteger('type')->comment('类型');
+            $table->unsignedTinyInteger('status')->default(0)->comment('状态 1-启用 0-禁用');
             $table->timestamps();
         });
     }

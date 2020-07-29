@@ -30,11 +30,14 @@ class ProductTemplate extends EloquentRepository
 
         DB::beginTransaction();
 
+        $model = new $this->eloquentClass;
+
         try {
             //  插入运费模板
-            (new $this->eloquentClass)->fill([
+            $model->fill([
                 'title' => $attributes['title'],
-                'type' => $attributes['type']
+                'type' => $attributes['type'],
+                'status' => $attributes['status']
             ])->save();
 
             switch ($attributes['type'])
@@ -42,12 +45,12 @@ class ProductTemplate extends EloquentRepository
                 case 0:
                     break;
                 case 1:
-                    (new $this->eloquentClass)->templateRule()->create([
+                    $model->templateRule()->create([
                         'city' => $attributes['city']
                     ]);
                     break;
                 case 2:
-                    (new $this->eloquentClass)->templateRule()->create([
+                    $model->templateRule()->create([
                         'city' => $attributes['city'],
                         'default_num' => $attributes['default_num'],
                         'default_price' => $attributes['default_price'],
@@ -57,7 +60,7 @@ class ProductTemplate extends EloquentRepository
                     break;
                 case 3:
                 case 4:
-                    (new $this->eloquentClass)->templateRule()->create([
+                    $model->templateRule()->create([
                         'city' => $attributes['city'],
                         'extra' => $attributes['extra']
                     ]);
@@ -69,7 +72,7 @@ class ProductTemplate extends EloquentRepository
             return true;
         }catch (\Exception $exception){
             DB::rollBack();
-
+            dd($exception->getMessage());
             return false;
         }
     }
@@ -77,44 +80,52 @@ class ProductTemplate extends EloquentRepository
     /**
      * 覆写更新方法
      *
+     * 此处涉及到行内编辑, $attributes 内没有我们需要的key,所以需要判断一下
+     *
      * @param Form $form
      * @return bool
      * @throws \Exception
      */
     public function update(Form $form)
     {
-        // 获取待新增的数据
+        // 获取待编辑的数据
         $attributes = $form->updates();
 
         DB::beginTransaction();
 
+        $id = $form->model()->id;
+
         try {
             //  获取当前要更新的模型
-            $model = (new $this->eloquentClass)::find($attributes['id']);
+            $model = (new $this->eloquentClass)::find($id);
 
-            $model->title = $attributes['title'];
+            if (isset($attributes['title'])){
+                $model->title = $attributes['title'];
+            }
 
-            $model->type = $attributes['type'];
+            if (isset($attributes['type'])){
+                $model->type = $attributes['type'];
+            }
+
+            $model->status = $attributes['status'];
 
             $model->save();
 
-            $type = $attributes['type'];
+            $type = isset($attributes['type']) ? $attributes['type'] : '';
 
             //  用户可能会改成其他的类型, 要判断一下
             switch ($type)
             {
-                case 0:
-                    break;
                 case 1:
                     $model->templateRule ? $model->templateRule()->update([
-                        'city' => $attributes['city']
+                        'city' => implode(',', $attributes['city'])
                     ]) : $model->templateRule()->create([
                         'city' => $attributes['city']
                     ]);
                     break;
                 case 2:
                     $model->templateRule ? $model->templateRule()->update([
-                        'city' => $attributes['city'],
+                        'city' => implode(',', $attributes['city']),
                         'default_num' => $attributes['default_num'],
                         'default_price' => $attributes['default_price'],
                         'add_num' => $attributes['add_num'],
@@ -130,12 +141,14 @@ class ProductTemplate extends EloquentRepository
                 case 3:
                 case 4:
                     $model->templateRule ? $model->templateRule()->update([
-                        'city' => $attributes['city'],
+                        'city' => implode(',', $attributes['city']),
                         'extra' => $attributes['extra']
                     ]) : $model->templateRule()->create([
                         'city' => $attributes['city'],
                         'extra' => $attributes['extra']
                     ]);
+                    break;
+                default :
                     break;
             }
             DB::commit();

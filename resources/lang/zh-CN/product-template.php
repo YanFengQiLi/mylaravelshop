@@ -7,6 +7,7 @@ return [
     'fields' => [
         'title' => '模板名称',
         'type' => '类型',
+        'status' => '是否启用'
     ],
     'options' => [
     ],

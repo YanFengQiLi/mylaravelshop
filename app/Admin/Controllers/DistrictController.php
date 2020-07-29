@@ -81,14 +81,17 @@ class DistrictController extends AdminController
         });
     }
 
+
     /**
      * 获取省份
      *
      * @param DistrictModel $district
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Support\Collection
      */
     public function getProvince(DistrictModel $district)
     {
-        return $district::getProvinceList();
+        return $district::where('pid', 0)->get([
+            'id', 'ext_name AS text'
+        ]);
     }
 }
