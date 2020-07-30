@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Product;
+use App\Models\ProductTemplate;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -91,6 +92,10 @@ class ProductController extends AdminController
 
         return Form::make($repository, function (Form $form) {
             $form->text('title')->required();
+            //  options 这里控制器默认选中, 也可以使用闭包自己控制选中
+            $form->select('product_template_id')
+                ->options(ProductTemplate::class, 'id', 'title')
+                ->ajax('/api/product-template')->required();
             //  三级联动
             $form->select('grand_id')->options('/api/grand-category')
                 ->load('parent_id', '/api/categories')
@@ -99,7 +104,6 @@ class ProductController extends AdminController
                 ->load('category_id', '/api/categories')
                 ->required();
             $form->select('category_id')->required();
-
             $form->editor('description')->required();
             $form->image('image')->uniqueName()
                 ->accept(config('filesystems.images_config.mime_type'))

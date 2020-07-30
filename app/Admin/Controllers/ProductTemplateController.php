@@ -9,6 +9,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use App\Models\ProductTemplate as ProductTemplateModel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class ProductTemplateController extends AdminController
@@ -31,8 +32,8 @@ class ProductTemplateController extends AdminController
                 3 => 'blue',
                 4 => 'red'
             ]);
-            //  异步弹窗
-            $grid->column('templateRule.city','查看地区')->display(function (){
+            //  返回城市
+            $grid->column('templateRule.city','地区')->display(function (){
                 $district = new District();
 
                 $data = $district::getProvinceList();
@@ -54,13 +55,21 @@ class ProductTemplateController extends AdminController
             $grid->status->switch('green');
             $grid->created_at;
             $grid->updated_at->sortable();
+            //  固定列 参数1: 从头开始的前 N 列  参数2: 从后往前数的 N 列
+            $grid->fixColumns(4,-4);
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('title');
 
                 $filter->equal('type')->select(ProductTemplateModel::RULES);
 
-                $filter->in('templateRule.city', '选择省份')->multipleSelect('api/province');
+                $filter->where('city', function ($query){
+                    $query->whereHas('templateRule', function ($query){
+                        $ids = implode(',', $this->input);
+
+                        $query->whereRaw("FIND_IN_SET({$ids}, city)");
+                    });
+                }, '地区')->multipleSelect('api/province');
             });
 
             $grid->disableDeleteButton();
@@ -119,10 +128,26 @@ class ProductTemplateController extends AdminController
                         ->customFormat(function () use ($selected){
                             return $selected;
                         });
-                    $form->number('default_num', '默认数量')->min(1)->width(-10, 2)->help('默认购买 N 件商品');
-                    $form->number('default_price', '默认邮费')->min(0)->width(-10, 2)->help('默认需要支付 N 元邮费');
-                    $form->number('add_num', '新增数量')->min(1)->width(-10, 2)->help('每新增 N 件商品');
-                    $form->number('add_price', '新增费用')->min(0)->width(-10, 2)->help('需要额外支付 N 元邮费');
+                    $form->number('default_num', '默认数量')
+                        ->min(1)
+                        ->width(-10, 2)
+                        ->help('默认购买 N 件商品')
+                        ->value($form->model()->template_rule['default_num']);
+                    $form->number('default_price', '默认邮费')
+                        ->min(0)
+                        ->width(-10, 2)
+                        ->help('默认需要支付 N 元邮费')
+                        ->value($form->model()->template_rule['default_price']);
+                    $form->number('add_num', '新增数量')
+                        ->min(1)
+                        ->width(-10, 2)
+                        ->help('每新增 N 件商品')
+                        ->value($form->model()->template_rule['add_num']);
+                    $form->number('add_price', '新增费用')
+                        ->min(0)
+                        ->width(-10, 2)
+                        ->help('需要额外支付 N 元邮费')
+                        ->value($form->model()->template_rule['add_price']);
                 })
                 ->when(ProductTemplateModel::FIXED, function (Form $form) use ($district, $selected) {
                     $form->tree('city', '选择地区')
@@ -132,7 +157,10 @@ class ProductTemplateController extends AdminController
                         ->customFormat(function () use ($selected){
                             return $selected;
                         });
-                    $form->number('extra', '固定邮费')->min(0);
+                    $form->number('extra', '固定邮费')
+                        ->min(0)
+                        ->rules('required_if:type,3|numeric', ['required_if' => '消费金额必须大于0', 'numeric' => '必须是数字'])
+                        ->value($form->model()->template_rule['extra']);
                 })
                 ->when(ProductTemplateModel::MONEY, function (Form $form) use ($district, $selected){
                     $form->tree('city', '选择地区')
@@ -142,10 +170,27 @@ class ProductTemplateController extends AdminController
                         ->customFormat(function () use ($selected){
                             return $selected;
                         });
-                    $form->number('extra', '消费金额')->min(0);
+                    $form->number('extra', '消费金额')
+                        ->min(0)
+                        ->rules('required_if:type,4|numeric', ['required_if' => '消费金额必须大于0', 'numeric' => '必须是数字'])
+                        ->value($form->model()->template_rule['extra']);
                 })
                 ->options(ProductTemplateModel::RULES)
                 ->default(ProductTemplateModel::FREE);
         });
+    }
+
+    /**
+     * 选择运费模板 select ajax 分页接口
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getProductTemplate(Request $request)
+    {
+        $q = $request->get('q');
+
+        return ProductTemplateModel::where('title', 'like', "%$q%")
+            ->paginate(null, ['id', 'title as text']);
     }
 }

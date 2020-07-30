@@ -32,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('parent_id')->comment('父级ID');
             $table->unsignedInteger('category_id')->comment('子级ID');
             $table->string('concat_id')->comment('以逗号连接分类ID');
+            $table->unsignedTinyInteger('product_template_id')->comment('运费模板ID');
             $table->timestamps();
         });
     }

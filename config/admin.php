@@ -156,7 +156,12 @@ return [
         | The global Grid action display class.
         |--------------------------------------------------------------------------
         */
+        //  以下拉菜单方式展示
         'grid_action_class' => Dcat\Admin\Grid\Displayers\DropdownActions::class,
+        //  以图标形式展示
+        'grid_logo_action_class' => Dcat\Admin\Grid\Displayers\Actions::class,
+        //  以右键下拉菜单展示
+        'grid_right_action_class' => Dcat\Admin\Grid\Displayers\ContextMenuActions::class
     ],
 
     /*

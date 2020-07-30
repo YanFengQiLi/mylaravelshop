@@ -17,6 +17,7 @@ return [
         'grand_id' => '顶级分类',
         'parent_id' => '父级分类',
         'category_id' => '子级分类',
+        'product_template_id' => '运费模板'
     ],
     'options' => [
     ],
