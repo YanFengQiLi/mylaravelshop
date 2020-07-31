@@ -2,9 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\BatchRestore;
 use App\Admin\Actions\Grid\Restore;
-use App\Admin\Repositories\AdvertType;
-use App\Models\Advert;
+use App\Models\AdvertType;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Controllers\AdminController;
@@ -35,11 +35,19 @@ class AdvertTypeController extends AdminController
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                //  添加 软删除行恢复操作
+                //  软删除行恢复操作
                 if (request('_scope_') == 'trashed') {
-                    $actions->append(new Restore(Advert::class));
+                    $actions->append(new Restore(AdvertType::class));
                 }
             });
+
+            $grid->batchActions(function (Grid\Tools\BatchActions $batch) {
+                //  软删除批量恢复操作
+                if (request('_scope_') == 'trashed') {
+                    $batch->add(new BatchRestore(AdvertType::class));
+                }
+            });
+
 
             $grid->disableCreateButton();
             $grid->disableEditButton();
@@ -61,5 +69,15 @@ class AdvertTypeController extends AdminController
             $form->display('created_at');
             $form->display('updated_at');
         });
+    }
+
+
+    /**
+     * 获取广告类型
+     * @return array
+     */
+    public function getAdvertType()
+    {
+       return AdvertType::get(['id', 'title AS text'])->toArray();
     }
 }

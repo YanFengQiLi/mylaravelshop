@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdvertType extends Model
 {
-	
+
     use SoftDeletes;
 
     protected $table = 'advert_type';
-    
+
 }

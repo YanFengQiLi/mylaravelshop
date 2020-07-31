@@ -2,10 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\BatchRestore;
+use App\Admin\Actions\Grid\Restore;
 use App\Admin\Repositories\Advert;
+use App\Models\Advert as AdvertModel;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 
 class AdvertController extends AdminController
@@ -17,43 +19,39 @@ class AdvertController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Advert(), function (Grid $grid) {
+        return Grid::make(new Advert('advertType'), function (Grid $grid) {
             $grid->id->sortable();
             $grid->title;
-            $grid->advert_type_id;
-            $grid->links;
-            $grid->status;
-            $grid->image;
-            $grid->sort;
+            $grid->column('advertType.title','广告类型');
+            $grid->links->link();
+            $grid->status->switch();
+            $grid->image->image('',100,100);
+            $grid->sort->sortable();
             $grid->created_at;
             $grid->updated_at->sortable();
-        
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
-            });
-        });
-    }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     *
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return Show::make($id, new Advert(), function (Show $show) {
-            $show->id;
-            $show->title;
-            $show->advert_type_id;
-            $show->links;
-            $show->status;
-            $show->image;
-            $show->sort;
-            $show->created_at;
-            $show->updated_at;
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->scope('trashed', '回收站')->onlyTrashed();
+                $filter->like('title');
+                $filter->equal('advert_type_id')->select('/api/advert-type');
+            });
+
+            $grid->disableViewButton();
+            $grid->setActionClass(config('admin.grid.grid_logo_action_class'));
+
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                //  软删除行恢复操作
+                if (request('_scope_') == 'trashed') {
+                    $actions->append(new Restore(AdvertModel::class));
+                }
+            });
+
+            $grid->batchActions(function (Grid\Tools\BatchActions $batch) {
+                //  软删除批量恢复操作
+                if (request('_scope_') == 'trashed') {
+                    $batch->add(new BatchRestore(AdvertModel::class));
+                }
+            });
         });
     }
 
@@ -65,16 +63,12 @@ class AdvertController extends AdminController
     protected function form()
     {
         return Form::make(new Advert(), function (Form $form) {
-            $form->display('id');
-            $form->text('title');
-            $form->text('advert_type_id');
-            $form->text('links');
-            $form->text('status');
-            $form->text('image');
-            $form->text('sort');
-        
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->text('title')->required();
+            $form->select('advert_type_id')->options('/api/advert-type')->required();
+            $form->url('links');
+            $form->image('image')->required();
+            $form->number('sort')->min(0);
+            $form->switch('status','是否启用');
         });
     }
 }

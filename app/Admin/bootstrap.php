@@ -5,6 +5,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid\Filter;
 use Dcat\Admin\Show;
+use Dcat\Admin\Layout\Navbar;
 
 /**
  * Dcat-admin - admin builder based on Laravel.
@@ -37,6 +38,12 @@ Form::resolving(function (Form $form) {
         $tools->disableDelete();
         $tools->disableView();
     });
+});
+
+//  自定义头部导航
+Admin::navbar(function (Navbar $navbar) {
+    //  后台用户消息
+    $navbar->right(view('admin.admin-message'));
 });
 
 

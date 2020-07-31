@@ -1,7 +1,9 @@
-<?php 
+<?php
 return [
     'labels' => [
-        'Advert' => 'Advert',
+        'Advert' => '广告管理',
+        'advert' => '广告管理',
+        'advert-list' => '广告列表'
     ],
     'fields' => [
         'title' => '广告名称',

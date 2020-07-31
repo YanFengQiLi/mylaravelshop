@@ -25,7 +25,7 @@ class HomeController extends Controller
             ->header('控制面板')
             ->description('主页')
             ->body(function (Row $row) {
-                $row->column(6, function (Column $column) {
+                /*$row->column(6, function (Column $column) {
                     $column->row(Dashboard::title());
                     $column->row(new Examples\Tickets());
                 });
@@ -38,7 +38,7 @@ class HomeController extends Controller
 
                     $column->row(new Examples\Sessions());
                     $column->row(new Examples\ProductOrders());
-                });
+                });*/
             });
     }
 }

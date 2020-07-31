@@ -46,6 +46,8 @@ Route::group([
         $router->get('province', 'DistrictController@getProvince');
         //  运费模板
         $router->get('product-template', 'ProductTemplateController@getProductTemplate');
+        //  获取广告类型
+        $router->get('advert-type', 'AdvertTypeController@getAdvertType');
     });
     /******************** select api接口  end ********************* */
 
