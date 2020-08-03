@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\AdminMessage;
-use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
@@ -21,18 +20,17 @@ class AdminMessageController extends AdminController
             $grid->id->sortable();
             $grid->type;
             $grid->title;
-            $grid->extra;
+//            $grid->extra;
             $grid->created_at;
             $grid->status->using([0 => '未读', 1 => '已读'])->badge([
                 0 => 'danger',
                 1 => 'success'
             ]);
             $grid->updated_at->sortable();
+            $grid->quickSearch('title');
 
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-
-            });
+            $grid->disableCreateButton();
+            $grid->disableEditButton();
         });
     }
 
@@ -52,24 +50,6 @@ class AdminMessageController extends AdminController
             $show->extra;
             $show->created_at;
             $show->updated_at;
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Form::make(new AdminMessage(), function (Form $form) {
-            $form->display('id');
-            $form->text('type');
-            $form->text('title');
-            $form->text('extra');
-
-            $form->display('created_at');
-            $form->display('updated_at');
         });
     }
 }

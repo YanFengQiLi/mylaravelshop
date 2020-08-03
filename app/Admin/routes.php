@@ -20,6 +20,7 @@ Route::group([
     $router->resource('member/integrals', 'MemberIntegralController');
     /******************** 会员管理 end ********************* */
 
+
     /******************** 广告管理 start ********************* */
     //  广告类型管理
     $router->resource('advert/advert-type', 'AdvertTypeController');
@@ -35,6 +36,9 @@ Route::group([
     $router->resource('products', 'ProductController');
     //  运费模板管理
     $router->resource('freight','ProductTemplateController');
+    //  消息管理
+    $router->resource('admin-message','AdminMessageController');
+
 
     /******************** select api接口  start ********************* */
     $router->group(['prefix' => 'api'], function ($router){
@@ -51,7 +55,10 @@ Route::group([
     });
     /******************** select api接口  end ********************* */
 
+
     /******************** 订单管理 start ********************* */
     //  订单列表
     $router->resource('order/order-list','OrderController');
+    /******************** 订单管理 end ********************* */
+
 });
