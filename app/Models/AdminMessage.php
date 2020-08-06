@@ -23,8 +23,9 @@ class AdminMessage extends Model
     const ORDER_REFUND = 2;
     //  消息类型
     const TYPE = [
-        self::ORDER_PAID => '已付款',
-        self::ORDER_REFUND => '退款申请'
+        self::ORDER_PAID => '已付款通知',
+        self::ORDER_REFUND => '退款申请通知'
     ];
+
 
 }

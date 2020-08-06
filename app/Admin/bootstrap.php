@@ -6,6 +6,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid\Filter;
 use Dcat\Admin\Show;
 use Dcat\Admin\Layout\Navbar;
+use App\Models\AdminMessage;
 
 /**
  * Dcat-admin - admin builder based on Laravel.
@@ -42,8 +43,18 @@ Form::resolving(function (Form $form) {
 
 //  自定义头部导航
 Admin::navbar(function (Navbar $navbar) {
-    //  后台用户消息
-    $navbar->right(view('admin.admin-message'));
+    //  获取后台管理员未读消息
+    $messages = AdminMessage::where('status',0)->limit(10)
+        ->orderBy('created_at','desc')
+        ->get();
+
+    $count = AdminMessage::where('status',0)->count();
+
+    $navbar->right(view('admin.admin-message',[
+        'messages' => $messages ?: [],
+        'total' => $count,
+        'type_name' => AdminMessage::TYPE
+    ]));
 });
 
 

@@ -36,8 +36,8 @@ Route::group([
     $router->resource('products', 'ProductController');
     //  运费模板管理
     $router->resource('freight','ProductTemplateController');
-    //  消息管理
-    $router->resource('admin-message','AdminMessageController');
+    //  消息管理  资源路由只能给对应的方法起名
+    $router->resource('admin-message','AdminMessageController')->name('index','admin-message');
 
 
     /******************** select api接口  start ********************* */
