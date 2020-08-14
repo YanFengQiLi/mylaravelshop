@@ -12,9 +12,35 @@ class Advert extends Model
 
     protected $table = 'advert';
 
-    public function advertType()
+    //  首页头部轮播
+    const HEAD_SCROLL = 1;
+    //  首页中间活动位广告
+    const MID = 2;
+
+    const TYPE = [
+        self::HEAD_SCROLL => '首页头部轮播',
+        self::MID => '首页中间活动位广告',
+    ];
+
+    public function getImageAttribute($value)
     {
-        return $this->belongsTo(AdvertType::class,'advert_type_id','id');
+        return env('APP_URL') .'uploads/'. $value;
     }
 
+    /**
+     * 只查询启用的
+     * @param $query
+     * @return mixed
+     */
+    public function scopeStatus($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    public function getAdvertList(array $where = [])
+    {
+        return self::query()->status()->where($where)->orderBy('sort', 'ASC')->get([
+            'id', 'title', 'type', 'links', 'image'
+        ]);
+    }
 }

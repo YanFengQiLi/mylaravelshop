@@ -22,8 +22,6 @@ Route::group([
 
 
     /******************** 广告管理 start ********************* */
-    //  广告类型管理
-    $router->resource('advert/advert-type', 'AdvertTypeController');
     //  广告列表
     $router->resource('advert/advert-list','AdvertController');
     /******************** 广告管理 end ********************* */

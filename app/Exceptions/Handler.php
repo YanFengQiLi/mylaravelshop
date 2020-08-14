@@ -3,8 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -51,6 +51,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($request->is("api/*")) {
+            if ($exception instanceof ValidationException) {
+                return api_response(201, [], array_values($exception->errors())[0][0]);
+            }
+        }
+
         return parent::render($request, $exception);
     }
 }

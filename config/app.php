@@ -238,8 +238,13 @@ return [
         //  Clockwork 门面类
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
         //  Intervention\Image 门面类
-        'Image' => Intervention\Image\Facades\Image::class
-
+        'Image' => Intervention\Image\Facades\Image::class,
+        //  JWT 权限门面类
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        //  JWT 工厂门面类
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
+
+    'deny_update' => false
 
 ];

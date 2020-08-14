@@ -19,10 +19,13 @@ class AdvertController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Advert('advertType'), function (Grid $grid) {
+        return Grid::make(new Advert(), function (Grid $grid) {
             $grid->id->sortable();
             $grid->title;
-            $grid->column('advertType.title','广告类型');
+            $grid->column('type','广告类型')->using(AdvertModel::TYPE)->label([
+                AdvertModel::HEAD_SCROLL => 'blue',
+                AdvertModel::MID => 'purple',
+            ]);
             $grid->links->link();
             $grid->status->switch();
             $grid->image->image('',100,100);
@@ -33,7 +36,7 @@ class AdvertController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->scope('trashed', '回收站')->onlyTrashed();
                 $filter->like('title');
-                $filter->equal('advert_type_id')->select('/api/advert-type');
+                $filter->equal('type')->select(AdvertModel::TYPE);
             });
 
             $grid->disableViewButton();
@@ -64,9 +67,9 @@ class AdvertController extends AdminController
     {
         return Form::make(new Advert(), function (Form $form) {
             $form->text('title')->required();
-            $form->select('advert_type_id')->options('/api/advert-type')->required();
+            $form->select('type')->options(AdvertModel::TYPE)->required();
             $form->url('links');
-            $form->image('image')->required();
+            $form->image('image')->rules('required', ['required' => '请上传图片']);
             $form->number('sort')->min(0);
             $form->switch('status','是否启用');
         });

@@ -19,10 +19,10 @@ class CreateAdvertTable extends Migration
         Schema::create('advert', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->default('')->comment('广告名称');
-            $table->unsignedTinyInteger('advert_type_id')->index()->comment('广告类型');
+            $table->unsignedTinyInteger('type')->index()->comment('广告类型');
             $table->string('links')->default('')->comment('链接地址');
             $table->boolean('status')->default(0)->comment('状态 1-启用 0-禁用');
-            $table->string('image')->default('')->comment('图片地址');
+            $table->string('image')->nullable()->default('')->comment('图片地址');
             $table->integer('sort')->default(1)->comment('排序');
             $table->timestamps();
             $table->softDeletes();

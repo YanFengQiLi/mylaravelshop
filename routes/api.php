@@ -18,5 +18,9 @@ use Illuminate\Http\Request;
 //});
 
 Route::namespace('Api')->group(function (){
-    Route::post('test/admin-message','TestController@createAdminMessage');
+
+    /********************** 首页接口 start **************************/
+    Route::get('index/getIndexBannerList', 'IndexController@getIndexBannerList');
+
+    /********************** 首页接口 end **************************/
 });
