@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
+    //  邮件通知会用到此名称
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
@@ -244,7 +244,7 @@ return [
         //  JWT 工厂门面类
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
-
+    //  后台拦截[删除/修改/新增]请求
     'deny_update' => false
 
 ];

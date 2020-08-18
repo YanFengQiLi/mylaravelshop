@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth', [
-            'except' => ['passwordLogin', 'mobileLogin']
+            'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin']
         ]);
     }
 

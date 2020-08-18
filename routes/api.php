@@ -19,6 +19,12 @@ use Illuminate\Http\Request;
 
 Route::namespace('Api')->group(function (){
 
+    /********************** 注册 start **************************/
+    Route::post('memberRegister', 'RegisterController@memberRegister');
+    Route::post('sendEmailCode', 'RegisterController@sendEmailCode');
+    /********************** 注册 end **************************/
+
+
     /********************** 首页接口 start **************************/
     Route::get('index/getIndexBannerList', 'IndexController@getIndexBannerList');
 
