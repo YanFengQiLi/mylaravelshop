@@ -21,11 +21,48 @@ if (!function_exists('api_response')){
      * @param string $message -返回信息
      * @return \Illuminate\Http\JsonResponse
      */
-    function api_response($code, $data = [], $message = ''){
+    function api_response($code, $data = [], $message = '')
+    {
         return response()->json([
             'code' => $code,
             'data' => $data ?: [],
             'message' => $message ?: ''
         ]);
+    }
+}
+
+if (!function_exists('generate_rand_number'))
+{
+    /**
+     * 生成给定长度的随机数
+     * @param int $length
+     * @return false|string
+     */
+    function generate_rand_number($length = 6) : string
+    {
+        $char = str_repeat('0123456789', 4);
+
+        $arr = explode(',', $char);
+
+        shuffle($arr);
+
+        $char = implode(',', $arr);
+
+        $char = str_shuffle($char);
+
+        return substr($char, 0, $length);
+    }
+}
+
+if (!function_exists('check_phone'))
+{
+    /**
+     * 校验手机号 添加了199 / 166 号码区段
+     * @param $phone
+     * @return bool
+     */
+    function check_phone($phone)
+    {
+        return preg_match("/^((13[0-9])|(14[5,6,7,9])|(15[^4])|(16[5,6])|(17[0-9])|(18[0-9])|(19[1,8,9]))\\d{8}$/", $phone) == 1 ? true : false;
     }
 }

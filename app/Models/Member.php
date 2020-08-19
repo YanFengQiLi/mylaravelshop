@@ -51,6 +51,10 @@ class Member extends Authenticatable implements JWTSubject
     use SoftDeletes;
     use Notifiable;
 
+    protected $fillable = [
+        'account', 'email', 'password', 'user_name', 'nick_name', 'photo'
+    ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -59,6 +63,11 @@ class Member extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function createMemberByData($data)
+    {
+        return self::create($data) ? true : false;
     }
 
 }

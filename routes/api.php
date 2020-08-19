@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 Route::namespace('Api')->group(function (){
 
     /********************** 注册 start **************************/
-    Route::post('memberRegister', 'RegisterController@memberRegister');
+    Route::post('memberEmailRegister', 'RegisterController@memberEmailRegister');
     Route::post('sendEmailCode', 'RegisterController@sendEmailCode');
     /********************** 注册 end **************************/
 
