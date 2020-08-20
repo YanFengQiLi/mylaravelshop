@@ -31,18 +31,37 @@ class MemberController extends AdminController
             $grid->id->sortable();
             $grid->account;
             $grid->email;
-            $grid->password;
             $grid->user_name;
             $grid->nick_name;
-            $grid->sex;
+            $grid->sex()->using(admin_trans('member.options.sex'));
             $grid->photo;
-            $grid->status;
+            $grid->integral;
+            $grid->status()->using(admin_trans('member.options.status'))->label([
+                0 => 'danger',
+                1 => 'success'
+            ]);
             $grid->created_at;
             $grid->updated_at->sortable();
 
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+            $grid->disableCreateButton();
+            $grid->disableEditButton();
+            $grid->disableViewButton();
+            $grid->setActionClass(config('admin.grid.grid_logo_action_class'));
 
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->equal('sex')->select([
+                    1 => '男',
+                    2 => '女'
+                ]);
+                $filter->equal('status')->select([
+                    0 => '冻结',
+                    1 => '正常'
+                ]);
+                $filter->like('account');
+                $filter->like('email');
+                $filter->like('user_name');
+                $filter->like('nick_name');
+                $filter->between('created_at')->date();
             });
         });
     }
@@ -60,7 +79,6 @@ class MemberController extends AdminController
             $show->id;
             $show->account;
             $show->email;
-            $show->password;
             $show->user_name;
             $show->nick_name;
             $show->sex;
@@ -82,7 +100,6 @@ class MemberController extends AdminController
             $form->display('id');
             $form->text('account');
             $form->text('email');
-            $form->text('password');
             $form->text('user_name');
             $form->text('nick_name');
             $form->text('sex');

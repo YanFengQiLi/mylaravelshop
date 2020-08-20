@@ -26,16 +26,42 @@ Route::group([
     $router->resource('advert/advert-list','AdvertController');
     /******************** 广告管理 end ********************* */
 
+
+    /******************** 优惠券管理 start ********************* */
     //  优惠券管理
     $router->resource('coupons', 'CouponCodeController');
+    /******************** 优惠券管理 end ********************* */
+
+
+    /******************** 商品管理 start ********************* */
     //  商品分类管理
     $router->resource('category','CategoryController');
     //  商品管理
     $router->resource('products', 'ProductController');
+    /******************** 商品管理 end ********************* */
+
+
+    /******************** 运费模板管理 start ********************* */
     //  运费模板管理
     $router->resource('freight','ProductTemplateController');
+    /******************** 运费模板管理 end ********************* */
+
+
+    /******************** 订单管理 start ********************* */
+    //  订单列表
+    $router->resource('order/order-list','OrderController');
+    /******************** 订单管理 end ********************* */
+
+
+    /******************** 消息管理 start ********************* */
     //  消息管理  资源路由只能给对应的方法起名
     $router->resource('admin-message','AdminMessageController')->name('index','admin-message');
+    /******************** 消息管理 end ********************* */
+
+
+    /******************** 网站设置 start ********************* */
+    $router->resource('web-sites','WebsiteController');
+    /******************** 网站设置 end ********************* */
 
 
     /******************** select api接口  start ********************* */
@@ -54,9 +80,5 @@ Route::group([
     /******************** select api接口  end ********************* */
 
 
-    /******************** 订单管理 start ********************* */
-    //  订单列表
-    $router->resource('order/order-list','OrderController');
-    /******************** 订单管理 end ********************* */
 
 });

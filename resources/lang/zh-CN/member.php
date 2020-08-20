@@ -9,7 +9,7 @@ return [
     ],
     // 表字段翻译
     'fields' => [
-        'account' => '账号-手机号',
+        'account' => '手机号',
         'email' => '邮箱',
         'password' => '密码',
         'user_name' => '姓名',
@@ -17,8 +17,17 @@ return [
         'sex' => '性别',
         'photo' => '头像',
         'status' => '状态',
+        'integral' => '积分'
     ],
     //  枚举选项翻译
     'options' => [
+        'sex' => [
+            1 => '男',
+            2 => '女'
+        ],
+        'status' => [
+            0 => '冻结',
+            1 => '正常'
+        ]
     ],
 ];
