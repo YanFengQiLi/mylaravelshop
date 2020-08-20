@@ -3,28 +3,54 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', [
+        $this->middleware('jwt', [
             'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin']
         ]);
     }
 
     /**
-     * 邮箱密码登录
+     * 密码登录
+     * @param Request $request
+     * @param Member $member
      * @return \Illuminate\Http\JsonResponse
      */
-    public function passwordLogin()
+    public function passwordLogin(Request $request, Member $member)
     {
-        $credentials = request(['email', 'password']);
+        $data = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|alpha_dash|between:6,14',
+        ],[
+            'email.required' => '请填写邮箱',
+            'email.email' => '邮箱格式错误',
+            'password.required' => '请填写密码',
+            'password.alpha_dash' => '密码只允许包含字母、数字，以及破折号 (-) 和下划线 ( _ )',
+            'password.between' => '密码长度只能在6-14之间',
+        ]);
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return api_response(202, [], 'token错误');
+        $result = $member->getMemberInfoByData(Arr::except($data, ['password']));
+
+        if (! $result) {
+            return api_response(201, [], '账号不存在');
         }
+
+        if (! Hash::check($data['password'], $result->password)) {
+            return api_response(201, [], '密码错误');
+        }
+
+        $payload = JWTFactory::customClaims(['sub' => $result])->make();
+
+        $token = JWTAuth::encode($payload)->get();
 
         return $this->respondWithToken($token);
     }
@@ -48,11 +74,6 @@ class AuthController extends Controller
      */
     public function respondWithToken($token)
     {
-        return api_response(200, [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            //  默认是 60分钟, 这里设置为一周
-            'expires_in' => auth('api')->factory()->getTTL() * 60 * 7
-        ]);
+        return api_response(200, $token, '获取成功');
     }
 }

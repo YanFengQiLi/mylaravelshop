@@ -55,6 +55,8 @@ class Member extends Authenticatable implements JWTSubject
         'account', 'email', 'password', 'user_name', 'nick_name', 'photo'
     ];
 
+    protected $hidden = ['password'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -73,6 +75,34 @@ class Member extends Authenticatable implements JWTSubject
     public function createMemberByData($data)
     {
         return self::create($data) ? true : false;
+    }
+
+    public function scopeStatus($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    /**
+     * 根据条件查询用户
+     * @param array $data
+     * @param array $column
+     * @return Member|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function getMemberInfoByData(array $data, $column = ['*'])
+    {
+        $query = self::query()->status();
+
+        if (isset($data['id'])) {
+            $query = $query->where('id', $data['id']);
+        }
+
+        if (isset($data['email'])) {
+            $query = $query->where('email', $data['email']);
+        }
+
+        $query = $query->select($column)->first();
+
+        return $query ? $query->makeHidden(['created_at', 'updated_at', 'deleted_at']) : null;
     }
 
 }

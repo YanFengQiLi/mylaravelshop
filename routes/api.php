@@ -24,9 +24,25 @@ Route::namespace('Api')->group(function (){
     Route::post('sendEmailCode', 'RegisterController@sendEmailCode');
     /********************** 注册 end **************************/
 
+    /********************** 登录 start **************************/
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('passwordLogin', 'AuthController@passwordLogin');
+    });
 
-    /********************** 首页接口 start **************************/
+    /********************** 登录 end **************************/
+
+
+    /********************** 首页 start **************************/
     Route::get('index/getIndexBannerList', 'IndexController@getIndexBannerList');
 
-    /********************** 首页接口 end **************************/
+    /********************** 首页 end **************************/
+
+    /********************** 个人中心 start **************************/
+    Route::group([
+        'prefix' => 'center',
+        'middleware' => 'jwt'
+    ],function () {
+        Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
+    });
+    /********************** 个人中心 end **************************/
 });

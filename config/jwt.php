@@ -100,8 +100,8 @@ return [
     | Notice: If you set this to null you should remove 'exp' element from 'required_claims' list.
     |
     */
-
-    'ttl' => env('JWT_TTL', 60),
+    //  设置 token 过期时间
+    'ttl' => env('JWT_TTL', 24 * 7 * 60),
 
     /*
     |--------------------------------------------------------------------------
