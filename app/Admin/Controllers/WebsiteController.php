@@ -54,21 +54,26 @@ class WebsiteController extends AdminController
     }
 
     /**
-     * Make a form builder.
-     *
      * @return Form
      */
     protected function form()
     {
         return Form::make(new Website(), function (Form $form) {
             $form->tab('基本设置', function (Form $form) {
-                $form->image('key[][logo]','logo');
-                $form->text('key[]');
-            })->tab('积分设置', function (Form $form){
-                $form->display('id');
-                $form->text('key');
-                $form->text('key_name');
-                $form->text('key_value');
+//                $form->image('key[logo]','logo');
+            })->tab('商城设置', function (Form $form){
+                $form->embeds('key', '', function ($form){
+                    $form->radio('register_integral', '新人注册送积分')->options([
+                        0 => '关闭',
+                        1 => '开启'
+                    ])->default('0');
+                    $form->number('register_integral_number', '赠送积分数量')->min(0)->width(100);
+                    $form->radio('register_coupon', '新人注册送优惠券')->options([
+                        0 => '关闭',
+                        1 => '开启'
+                    ])->default('0');
+                    $form->multipleSelect('register_coupon_id', '选择优惠券');
+                });
             });
 
         });
