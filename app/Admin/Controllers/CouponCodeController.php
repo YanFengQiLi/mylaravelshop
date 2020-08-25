@@ -9,6 +9,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use App\Models\CouponCode as CouponCodeModel;
+use Illuminate\Http\Request;
 
 class CouponCodeController extends AdminController
 {

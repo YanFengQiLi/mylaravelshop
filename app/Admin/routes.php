@@ -76,6 +76,8 @@ Route::group([
         $router->get('product-template', 'ProductTemplateController@getProductTemplate');
         //  获取广告类型
         $router->get('advert-type', 'AdvertTypeController@getAdvertType');
+        //  优惠券多选选择
+        $router->get('coupon-select', 'CouponCodeController@getCouponSelect');
     });
     /******************** select api接口  end ********************* */
 
