@@ -15,9 +15,8 @@ class CreateWebsiteTable extends Migration
     {
         Schema::create('website', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key')->index()->default('')->comment('配置标识');
-            $table->string('key_name')->default('')->comment('标识名称');
-            $table->string('key_value')->default('');
+            $table->string('key_name')->index()->default('')->comment('配置标识');
+            $table->string('key_value')->default('')->comment('标识值');
         });
     }
 

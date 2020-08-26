@@ -16,7 +16,8 @@ class CouponCodeTable extends LazyRenderable
     public function grid(): Grid
     {
         return Grid::make(new CouponCode(), function (Grid $grid) {
-            $grid->model()->where('enable',1)->where('total','>',0);
+            $grid->model()->where('enable',1)
+                ->where('total','>',0);
 
             $grid->id;
             $grid->column('name', trans('coupon-code.fields.name'));
@@ -32,14 +33,16 @@ class CouponCodeTable extends LazyRenderable
                 return $this->after_time ?: '--';
             });
 
-            $grid->quickSearch(['id', 'name']);
+            $grid->quickSearch(['name'])->placeholder('输入优惠券标题');
 
             $grid->paginate(10);
             $grid->disableActions();
 
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->like('name')->width(4);
-            });
+//            $grid->filter(function (Grid\Filter $filter) {
+//                $filter->like('name', trans('coupon-code.fields.name'));
+//
+//                $filter->equal('type', trans('coupon-code.fields.type'))->select([0 => 111]);
+//            });
         });
     }
 }
