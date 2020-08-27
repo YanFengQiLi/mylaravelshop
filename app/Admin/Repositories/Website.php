@@ -24,18 +24,17 @@ class Website extends EloquentRepository
 
         try {
             foreach ($attributes as $config => $value) {
-                if (Model::where('key_name', $config)->value('key_value')) {
+                if (Model::where('key_name', $config)->value('key_name')) {
                     Model::where('key_name', $config)->update([
-                        'key_value' => $value
+                        'key_value' => is_null($value) ? '' : $value
                     ]);
                 } else {
                     Model::create([
                         'key_name' => $config,
-                        'key_value' => $value,
+                        'key_value' => is_null($value) ? '' : $value
                     ]);
                 }
             }
-
             DB::commit();
             return true;
         } catch (\Exception $exception) {

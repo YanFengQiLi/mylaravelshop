@@ -13,15 +13,25 @@ use App\Models\Website as WebModel;
 
 class WebsiteController extends AdminController
 {
+    private $configArr = [
+        'logo' => '',
+        'shop_name' => '',
+        'register_integral' => '0',
+        'register_integral_number' => '0',
+        'register_coupon' => '0',
+        'register_coupon_id' => '',
+        'integral_money' => '0',
+        'use_integral' => '0',
+        'integral_money_number' => '0',
+        'sign_rule' => 'add',
+        'fix_number' => '0',
+    ];
+
     public function index(Content $content)
     {
-        $web = new WebModel();
-
-        $data = $web->getWebSiteConfig();
-
         return $content
             ->title('网站设置')
-            ->body($this->form($data));
+            ->body($this->form());
     }
 
     /**
@@ -42,17 +52,24 @@ class WebsiteController extends AdminController
     }
 
     /**
-     * @param $web
      * @return Form
      */
-    protected function form($web)
+    protected function form()
     {
+        $webModel = new WebModel();
+
+        $data = $webModel->getWebSiteConfig();
+
+        $web = $data + $this->configArr;
+
         return Form::make(new Website(), function (Form $form) use ($web) {
             $form->action('web-sites');
 
             $form->tab('基本设置', function (Form $form) use ($web) {
-                $form->image('logo', 'logo')->required();
-                $form->text('shop_name', '网站名称')->value($web['shop_name'])->required();
+                //  此处赋值必须这么写, 查看 Form/Field/File.php : initialPreviewConfig 方法需要的是一个数组
+                $form->image('logo', 'logo')->value(['logo' => $web['logo']]);
+
+                $form->text('shop_name', '网站名称')->value($web['shop_name']);
             })
                 ->tab('商城设置', function (Form $form) use ($web) {
                     $form->radio('register_integral', '新人注册送积分')
@@ -70,8 +87,16 @@ class WebsiteController extends AdminController
                     $form->radio('register_coupon', '新人注册送优惠券')
                         ->when(1, function (Form $form) use ($web) {
                             $form->multipleSelectTable('register_coupon_id', '选择优惠券')
-                                ->from(CouponCodeTable::make($web['register_coupon_id'] ?: []))
-                                ->model(CouponCode::class, 'id', 'name')
+                                ->max(5)
+                                ->from(CouponCodeTable::make())
+                                ->options(function ($value) {
+                                    //  渲染选中项
+                                    if (!$value) {
+                                        return [];
+                                    }
+                                    return CouponCode::whereIn('id', $value)->pluck('name', 'id');
+                                })
+                                ->value($web['register_coupon_id'] ? explode(',', $web['register_coupon_id']) : [])
                                 ->saving(function ($v) {
                                     return implode(',', $v);
                                 });

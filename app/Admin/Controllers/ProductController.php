@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Renderable\ProductTemplateTable;
 use App\Admin\Repositories\Product;
 use App\Models\ProductTemplate;
 use Dcat\Admin\Form;
@@ -92,10 +93,10 @@ class ProductController extends AdminController
 
         return Form::make($repository, function (Form $form) {
             $form->text('title')->required();
-            //  options 这里控制器默认选中, 也可以使用闭包自己控制选中
-            $form->select('product_template_id')
-                ->options(ProductTemplate::class, 'id', 'title')
-                ->ajax('/api/product-template')->required();
+            $form->selectTable('product_template_id')
+                ->from(ProductTemplateTable::make())
+                ->model(ProductTemplate::class, 'id', 'title')
+                ->required();
             //  三级联动
             $form->select('grand_id')->options('/api/grand-category')
                 ->load('parent_id', '/api/categories')
