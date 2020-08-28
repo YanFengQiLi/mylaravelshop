@@ -2,6 +2,7 @@
 return [
     'labels' => [
         'Order' => '订单',
+        'order' => '订单管理',
         'order-list' => '订单列表'
     ],
     'fields' => [

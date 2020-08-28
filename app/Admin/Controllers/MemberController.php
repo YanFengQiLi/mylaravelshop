@@ -1,15 +1,4 @@
 <?php
-/*
- * @Author: your name
- * @Date: 2020-06-10 09:18:29
- * @LastEditTime: 2020-06-10 10:58:34
- * @LastEditors: your name
- * @Description: In User Settings Edit
- * @FilePath: \mylaravel\app\Admin\Controllers\MemberController.php
- */
-/**
- *  会员控制器
- */
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Member;

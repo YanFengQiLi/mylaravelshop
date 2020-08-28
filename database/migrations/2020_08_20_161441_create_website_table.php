@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author zhenhong~
+ * @description 网站设置表
+ */
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

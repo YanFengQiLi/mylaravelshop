@@ -118,7 +118,7 @@ return [
     */
     'auth' => [
         'enable' => true,
-
+        //  登录控制器
         'controller' => App\Admin\Controllers\AuthController::class,
 
         'guard' => 'admin',

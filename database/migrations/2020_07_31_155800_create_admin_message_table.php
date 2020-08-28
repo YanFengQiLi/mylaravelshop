@@ -1,14 +1,12 @@
 <?php
-
+/**
+ * @author zhnehong~
+ * @description 管理员消息表
+ */
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * @author zhnehong~
- * @description 管理员消息表
- * Class CreateAdminMessageTable
- */
 class CreateAdminMessageTable extends Migration
 {
     /**
