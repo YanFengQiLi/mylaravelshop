@@ -33,8 +33,18 @@ Route::namespace('Api')->group(function (){
 
 
     /********************** 首页 start **************************/
+    //  首页banner轮播
     Route::get('index/getIndexBannerList', 'IndexController@getIndexBannerList');
-
+    //  签到
+    Route::group([
+        'prefix' => 'index',
+        'middleware' => 'jwt'
+    ], function (){
+        //  获取用户当月签到列表
+        Route::get('getMemberSignList', 'SignController@getMemberSignList');
+        //  用户签到
+        Route::post('sign', 'SignController@sign');
+    });
     /********************** 首页 end **************************/
 
     /********************** 个人中心 start **************************/
