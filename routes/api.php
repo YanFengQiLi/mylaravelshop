@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::namespace('Api')->group(function (){
+Route::namespace('Api')->group(function () {
 
     /********************** 注册 start **************************/
     Route::post('memberEmailRegister', 'RegisterController@memberEmailRegister');
@@ -39,11 +39,11 @@ Route::namespace('Api')->group(function (){
     Route::group([
         'prefix' => 'index',
         'middleware' => 'jwt'
-    ], function (){
+    ], function () {
         //  获取用户当月签到列表
         Route::get('getMemberSignList', 'SignController@getMemberSignList');
         //  用户签到
-        Route::post('sign', 'SignController@sign');
+        Route::post('createSignRecord', 'SignController@createSignRecord');
     });
     /********************** 首页 end **************************/
 
@@ -51,7 +51,7 @@ Route::namespace('Api')->group(function (){
     Route::group([
         'prefix' => 'center',
         'middleware' => 'jwt'
-    ],function () {
+    ], function () {
         Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
     });
     /********************** 个人中心 end **************************/

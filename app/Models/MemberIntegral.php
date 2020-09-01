@@ -29,8 +29,41 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MemberIntegral extends Model
 {
-	
-    protected $table = 'member_integral';
-    
 
+    protected $table = 'member_integral';
+
+    protected $fillable = ['member_id', 'type', 'source', 'num'];
+
+    //  签到
+    const SIGN = 'sign';
+    //  下单评价
+    const ORDER_COMMENT = 'comment';
+    //  下单积分抵现
+    const ORDER_SPEND = 'order';
+    //  积分商品兑换
+    const SPEND = 'spend';
+
+    //  积分来源
+    const SOURCE = [
+        self::SIGN => '签到',
+        self::ORDER_COMMENT => '下单评价',
+        self::ORDER_SPEND => '签到',
+        self::SPEND => '积分商品兑换'
+    ];
+
+    /**
+     * 获取积分类型
+     * @param $source
+     * @return string
+     */
+    public static function getType($source)
+    {
+        $add = [self::SIGN, self::ORDER_COMMENT];
+
+        if (in_array($source, $add)) {
+            return 'add';
+        } else {
+            return 'sub';
+        }
+    }
 }

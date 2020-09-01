@@ -83,7 +83,8 @@ class IntegralGoodController extends AdminController
                 $pictures = json_decode($pictures, true);
                 return implode(',' ,$pictures);
             })->image();
-            $show->model()->html($show->model()->description);
+            //  显示富文本信息
+            $show->field('description')->unescape();
             $show->field('type')->using(IntegralGoodModel::TYPE);
             $show->field('money');
             $show->field('number');
