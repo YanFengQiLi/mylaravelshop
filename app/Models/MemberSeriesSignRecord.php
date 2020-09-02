@@ -9,4 +9,6 @@ class MemberSeriesSignRecord extends Model
     protected $table = 'member_series_sign_record';
 
     public $timestamps = false;
+
+    protected $fillable = ['member_id', 'sign_day'];
 }

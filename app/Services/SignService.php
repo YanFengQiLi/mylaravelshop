@@ -37,9 +37,10 @@ class SignService
     public function get($date)
     {
         return MemberSign::where('member_id', $this->memberId)
-            ->whereRaw("DATE_FORMAT(sign_date, '%Y-%m') = $date")
+            ->selectRaw('sign_date,1 AS is_sign')
+            ->whereRaw("DATE_FORMAT(sign_date, '%Y-%m') = '$date'")
             ->orderBy('sign_date', 'ASC')
-            ->get('sign_date');
+            ->get();
     }
 
     /**

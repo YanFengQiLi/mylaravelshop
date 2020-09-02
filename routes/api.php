@@ -43,7 +43,7 @@ Route::namespace('Api')->group(function () {
         //  获取用户当月签到列表
         Route::get('getMemberSignList', 'SignController@getMemberSignList');
         //  用户签到
-        Route::post('createSignRecord', 'SignController@createSignRecord');
+        Route::post('createMemberSign', 'SignController@createMemberSign');
     });
     /********************** 首页 end **************************/
 
