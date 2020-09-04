@@ -66,4 +66,9 @@ class MemberIntegral extends Model
             return 'sub';
         }
     }
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class,'member_id', 'id');
+    }
 }

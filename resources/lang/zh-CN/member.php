@@ -5,7 +5,8 @@ return [
         // 这个是页面 title 翻译
         'Member' => '会员列表',
         //  面包屑翻译,是根据路由匹配的  /member/users
-        'users' => '会员列表'
+        'users' => '会员列表',
+        'member' => '会员管理',
     ],
     // 表字段翻译
     'fields' => [

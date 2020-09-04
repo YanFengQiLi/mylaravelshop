@@ -105,4 +105,29 @@ class Member extends Authenticatable implements JWTSubject
         return $query ? $query->makeHidden(['created_at', 'updated_at', 'deleted_at']) : null;
     }
 
+    /**
+     * 统计新用户
+     * @param string $condition
+     * @return int
+     */
+    public function countNewMember($condition = 'day')
+    {
+        switch ($condition) {
+            case 'month':
+                $date = date('Y-m');
+                $group = "DATE_FORMAT('created_at', {$date})";
+                break;
+            case 'year':
+                $date = date('Y');
+                $group = "DATE_FORMAT('created_at', {$date})";
+                break;
+            default :
+                $date = date('Y-m-d');
+                $group = "DATE_FORMAT('created_at', {$date})";
+                break;
+        }
+
+        return self::query()->groupByRaw($group)->count();
+    }
+
 }

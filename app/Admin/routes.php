@@ -17,7 +17,7 @@ Route::group([
     //  会员管理
     $router->resource('member/users', 'MemberController');
     //  会员积分管理
-    $router->resource('member/integrals', 'MemberIntegralController');
+    $router->resource('member/integrals', 'MemberIntegralController')->only(['index']);
     /******************** 会员管理 end ********************* */
 
 
