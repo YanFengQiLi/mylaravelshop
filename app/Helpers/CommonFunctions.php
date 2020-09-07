@@ -69,7 +69,7 @@ if (!function_exists('check_phone')) {
     }
 }
 
-if (!function_exists('base_today_generate_date_array')) {
+if (!function_exists('generate_date_array')) {
     /**
      * 根据条件生成日期数组
      * @param $number
@@ -78,15 +78,15 @@ if (!function_exists('base_today_generate_date_array')) {
      * @param string $date
      * @return mixed
      */
-    function base_today_generate_date_array($number, $type = 'day', $field = 'date', $date = '')
+    function generate_date_array($number, $type = 'day', $field = 'date', $date = '')
     {
         $key = $type . '_' . $number;
 
         $arr = Cache::get($key, []);
 
-        $format = $type == 'days' ? 'Y-m-d' : 'Y-m';
+        $format = $type == 'day' ? 'Y-m-d' : 'Y-m';
 
-        $str = $type == 'days' ? "+1 days" : "+1 month";
+        $str = $type == 'day' ? "+1 day" : "+1 month";
 
         if (empty($arr)) {
             $i = $number;
@@ -103,7 +103,9 @@ if (!function_exists('base_today_generate_date_array')) {
                 $i--;
             }while($i > 0);
 
-            Cache::store('redis')->put($key, json_encode($arr));
+            $arr = json_encode($arr);
+
+            Cache::store('redis')->put($key, $arr);
         }
 
         return json_decode($arr, true);

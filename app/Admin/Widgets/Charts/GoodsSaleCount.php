@@ -12,7 +12,8 @@ use App\Services\BaseOrderService;
 
 class GoodsSaleCount extends Chart
 {
-    public $title = '商品总销量一览图';
+    //  图表标题,设置为空即可,由BOX组件设置即可
+    public $title = '';
 
     public function __construct($containerSelector = null, $options = [])
     {
@@ -159,16 +160,5 @@ class GoodsSaleCount extends Chart
     public function withCategories($data)
     {
         return $this->option('xaxis.categories', $data);
-    }
-
-    /**
-     * 渲染图表
-     * @return string
-     */
-    public function render()
-    {
-//        $this->buildData();
-
-        return parent::render();
     }
 }

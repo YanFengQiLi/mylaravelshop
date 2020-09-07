@@ -1,14 +1,16 @@
 <?php
+
 namespace App\Admin\Controllers;
 
 use App\Admin\Metrics\Examples;
 use App\Admin\Widgets\Charts\GoodsSaleCount;
+use App\Admin\Widgets\Charts\NewMember;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
-use Dcat\Admin\Widgets\Card;
+use Dcat\Admin\Widgets\Box;
 use Dcat\Admin\Widgets\Dropdown;
 
 class HomeController extends Controller
@@ -23,19 +25,18 @@ class HomeController extends Controller
                     $column->row($this->getMemberGrowth());
 
                     $column->row(
-                        Card::make('', GoodsSaleCount::make())
-                        ->tool($this->generateDropdownWidget())
+                        $this->generateChartAndDropdownWidget(GoodsSaleCount::class, 'goods-sale', '商品总销量一览图')
                     );
                 });
 
                 $row->column(6, function (Column $column) {
                     $column->row(function (Row $row) {
-                        $row->column(6, new Examples\NewUsers());
-                        $row->column(6, new Examples\NewDevices());
+                          $row->column(6, $this->generateChartAndDropdownWidget(NewMember::class, 'new-member', '新增用户变化趋势图'));
+//                        $row->column(6, new Examples\NewDevices());
                     });
 
-                    $column->row(new Examples\Sessions());
-                    $column->row(new Examples\ProductOrders());
+//                    $column->row(new Examples\Sessions());
+//                    $column->row(new Examples\ProductOrders());
                 });
             });
     }
@@ -58,11 +59,15 @@ class HomeController extends Controller
         return view('dashboard.member-growth', compact('count'));
     }
 
+
     /**
-     * 构建下拉菜单
-     * @return Dropdown
+     * 构建图表和下拉菜单组件
+     * @param $chart
+     * @param $boxId
+     * @param $title
+     * @return Box
      */
-    public function generateDropdownWidget()
+    public function generateChartAndDropdownWidget($chart, $boxId, $title)
     {
         $options = [
             '7' => '最近7天',
@@ -72,11 +77,20 @@ class HomeController extends Controller
             '12' => '最近1年'
         ];
 
-        return Dropdown::make($options)
-        ->button(current($options))
-        ->click()
-        ->map(function ($item, $index) {
-            return "<a class='switch-bar' data-option='{$index}'>{$item}</a>";
-        });
+        $dropdown = Dropdown::make($options)
+            ->button(current($options))
+            ->click()
+            ->map(function ($item, $index) {
+                return "<a class='switch-bar' data-option='{$index}'>{$item}</a>";
+            });
+
+        $bar = $chart::make()
+            ->fetching('$("#my-box").loading()') // 设置loading效果
+            ->fetched('$("#my-box").loading(false)') // 移除loading效果
+            ->click('.switch-bar'); // 设置图表点击菜单则重新发起请求，且被点击的目标元素上的 data-xxx 属性会被作为post数据发送到后端API
+
+        return Box::make($title, $bar)
+            ->id($boxId) // 设置盒子的ID
+            ->tool($dropdown); // 设置下拉菜单按钮
     }
 }
