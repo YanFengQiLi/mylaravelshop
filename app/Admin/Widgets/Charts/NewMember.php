@@ -25,12 +25,19 @@ class NewMember extends Chart
      */
     public function setUpOptions()
     {
-        return [
+        $this->options([
+            'series' => [
+                [
+                    'type' => 'column',
+                    'name' => ''
+                ]
+            ],
             'chart' => [
                 'type' => 'line',
                 'toolbar' => [
                     'show' => false,
                 ],
+                'height' => 595
             ],
             'stroke' => [
                 'with' => [0, 4]
@@ -38,7 +45,7 @@ class NewMember extends Chart
             'dataLabels' => [
                 'enabled' => false
             ]
-        ];
+        ]);
     }
 
     /**
@@ -84,11 +91,12 @@ class NewMember extends Chart
             $dateArray = generate_date_array($number, 'month', 'date_time');
         }
 
-
         $members = Member::whereBetween('created_at', $between)
             ->select($select, DB::raw('COUNT(*) AS total_number'))
             ->groupByRaw($group)
             ->get();
+
+        $data = [];
 
         foreach ($members as $member)
         {
@@ -109,12 +117,9 @@ class NewMember extends Chart
             }
         }
 
-//        $this->withData([
-//            'data' => array_column($data, 'total_number'),
-//            'type' => 'line'
-//        ]);
+        $dataMember = config('app.is_mock') ? mock_random_number_array($number) : array_column($data, 'total_number');
 
-
+        $this->withData($dataMember);
 
         $this->withLabels(array_column($data, 'date_time'));
     }
@@ -126,7 +131,7 @@ class NewMember extends Chart
      */
     public function withData($data)
     {
-        return $this->option('series', [$data]);
+        return $this->option('series.0.data', $data);
     }
 
     /**

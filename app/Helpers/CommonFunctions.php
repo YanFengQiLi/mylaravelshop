@@ -111,3 +111,22 @@ if (!function_exists('generate_date_array')) {
         return json_decode($arr, true);
     }
 }
+
+if (!function_exists('mock_random_number_array')) {
+    /**
+     * 模拟生成随机数数组
+     * @param $len
+     * @param int $min
+     * @param int $max
+     * @return array
+     */
+   function mock_random_number_array($len, $min = 100, $max = 300){
+       $generator = function ($len) use ($min, $max){
+           for ($i = 1; $i <= $len; $i++) {
+               yield mt_rand($min, $max);
+           }
+       };
+
+       return collect($generator($len))->toArray();
+   }
+}

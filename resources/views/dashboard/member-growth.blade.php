@@ -24,9 +24,9 @@
             <div class="text-center mb-1">
                 <h1 class="mb-3 mt-2 text-white">新用戶增长看板</h1>
                 <div class="links">
-                    <a href="javascript:void(0)">今日增长: {{ $count['day'] }}</a>
-                    <a href="javascript:void(0)">本月增长: {{ $count['month'] }}</a>
-                    <a href="javascript:void(0)">本年增长: {{ $count['year'] }}</a>
+                    <a href="javascript:void(0)" style="color: orangered;">今日增长: {{ $count['day'] }}</a>
+                    <a href="javascript:void(0)" style="color: limegreen;">本月增长: {{ $count['month'] }}</a>
+                    <a href="javascript:void(0)" style="color: lightskyblue;">本年增长: {{ $count['year'] }}</a>
                 </div>
             </div>
         </div>

@@ -127,11 +127,8 @@ class GoodsSaleCount extends Chart
             ->whereNotIn('pay_status', [BaseOrderService::WAIT_PAYING, BaseOrderService::REFUND_SUCCESS])
             ->count() > 0 ?: 148;
 
-        $data = [
-            [
-                'data' => [$productsNum, $groupNum, $integralNum]
-            ]
-        ];
+
+        $data = config('app.is_mock') ? mock_random_number_array(3,1000, 5000) : [$productsNum, $groupNum, $integralNum];
 
         $categories = ['正常商品', '拼团商品', '积分商品'];
 
@@ -149,7 +146,7 @@ class GoodsSaleCount extends Chart
      */
     public function withData($data)
     {
-        return $this->option('series', $data);
+        return $this->option('series.0.data', $data);
     }
 
     /**

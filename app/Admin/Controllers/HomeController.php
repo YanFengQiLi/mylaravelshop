@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Metrics\Examples;
 use App\Admin\Widgets\Charts\GoodsSaleCount;
 use App\Admin\Widgets\Charts\NewMember;
 use App\Http\Controllers\Controller;
@@ -31,19 +30,19 @@ class HomeController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $column->row(function (Row $row) {
-                          $row->column(6, $this->generateChartAndDropdownWidget(NewMember::class, 'new-member', '新增用户变化趋势图'));
-//                        $row->column(6, new Examples\NewDevices());
+                        $row->column(
+                            12, $this->generateChartAndDropdownWidget(NewMember::class, 'new-member', '新增用户变化趋势图')
+                        );
                     });
+                });
 
-//                    $column->row(new Examples\Sessions());
-//                    $column->row(new Examples\ProductOrders());
+                $row->column(6, function (Column $column) {
                 });
             });
     }
 
     /**
      * 新用户增长看板
-     * @param Member $member
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getMemberGrowth()
@@ -56,9 +55,18 @@ class HomeController extends Controller
             'year' => $member->countNewMember('year'),
         ];
 
+        if (config('app.is_mock')) {
+            list($day, $month, $year) = mock_random_number_array(3, 100, 500);
+
+            $count = [
+                'day' => $day,
+                'month' => $month,
+                'year' => $year
+            ];
+        }
+
         return view('dashboard.member-growth', compact('count'));
     }
-
 
     /**
      * 构建图表和下拉菜单组件

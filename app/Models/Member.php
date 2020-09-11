@@ -115,19 +115,19 @@ class Member extends Authenticatable implements JWTSubject
         switch ($condition) {
             case 'month':
                 $date = date('Y-m');
-                $group = "DATE_FORMAT('created_at', {$date})";
+                $where = "DATE_FORMAT('created_at', '%Y-%m')";
                 break;
             case 'year':
                 $date = date('Y');
-                $group = "DATE_FORMAT('created_at', {$date})";
+                $where = "DATE_FORMAT('created_at', '%Y')";
                 break;
             default :
                 $date = date('Y-m-d');
-                $group = "DATE_FORMAT('created_at', {$date})";
+                $where = "DATE_FORMAT('created_at', '%Y-%m-%d')";
                 break;
         }
 
-        return self::query()->groupByRaw($group)->count();
+        return self::query()->whereRaw("$where = $date")->count();
     }
 
 }

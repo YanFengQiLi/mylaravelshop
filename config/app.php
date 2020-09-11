@@ -245,6 +245,9 @@ return [
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
     //  后台拦截[删除/修改/新增]请求
-    'deny_update' => false
+    'deny_update' => false,
+
+    //  是否启用 mock 数据
+    'is_mock' => env('IS_MOCK', true)
 
 ];
