@@ -35,7 +35,7 @@ class GoodsSaleCount extends Chart
             'color' => $color,
             'chart' => [
                 'type' => 'bar',
-                'height' =>380,
+                'height' => 380,
                 'toolbar' => [
                     'show' => false
                 ]
@@ -97,7 +97,7 @@ class GoodsSaleCount extends Chart
     {
         $today = date('Y-m-d');
 
-        switch ($number = (int) $request->get('option')) {
+        switch ($number = (int)$request->get('option')) {
             case 30:
             case 90:
                 $beforeDate = strtotime("-$number day", strtotime($today));
@@ -113,7 +113,7 @@ class GoodsSaleCount extends Chart
                 break;
         }
 
-        $between = [$beforeDate, $today];
+        $between = [date('Y-m-d', $beforeDate), $today];
 
         //  正常商品
         $productsNum = Order::whereBetween('paid_at', $between)
@@ -131,7 +131,7 @@ class GoodsSaleCount extends Chart
             ->count();
 
 
-        $data = config('app.is_mock') ? mock_random_number_array(3,1000, 5000) : [$productsNum, $groupNum, $integralNum];
+        $data = config('app.is_mock') ? mock_random_number_array(3, 1000, 5000) : [$productsNum, $groupNum, $integralNum];
 
         $categories = ['正常商品', '拼团商品', '积分商品'];
 

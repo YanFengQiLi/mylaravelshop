@@ -32,8 +32,8 @@ class CreateOrdersTable extends Migration
             $table->boolean('reviewed')->default(false)->comment('订单是否评价');
             $table->text('deliver_data')->nullable()->comment('物流信息json');
             $table->text('extra')->nullable()->comment('物流附加信息');
-            $table->string('pay_status')->default(\App\Models\Order::WAIT_PAYING)->comment('支付状态');
-            $table->string('deliver_status')->default(\App\Models\Order::WAIT_DELIVER)->comment('物流状态');
+            $table->string('pay_status')->default(\App\Services\BaseOrderService::WAIT_PAYING)->comment('支付状态');
+            $table->string('deliver_status')->default(\App\Services\BaseOrderService::WAIT_DELIVER)->comment('物流状态');
             $table->timestamps();
         });
     }

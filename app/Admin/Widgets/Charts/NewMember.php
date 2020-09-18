@@ -75,7 +75,7 @@ class NewMember extends Chart
                 break;
         }
 
-        $between = [$beforeDate, $today];
+        $between = [date('Y-m-d', $beforeDate), $today];
 
         if (in_array($number, [7, 30, 90])) {
             $group = "DATE_FORMAT(created_at, '%Y-%m-%d')";

@@ -64,4 +64,3 @@ Admin::navbar(function (Navbar $navbar) {
     ]));
 });
 
-

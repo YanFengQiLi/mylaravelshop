@@ -174,6 +174,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         //  七牛云储存
         zgldh\QiniuStorage\QiniuFilesystemServiceProvider::class,
+        //  debug
+        Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -243,6 +245,8 @@ return [
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         //  JWT 工厂门面类
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        //  debug 门面类
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
     //  后台拦截[删除/修改/新增]请求
     'deny_update' => false,
