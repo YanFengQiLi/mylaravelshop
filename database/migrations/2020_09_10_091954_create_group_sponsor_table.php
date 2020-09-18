@@ -25,7 +25,6 @@ class CreateGroupSponsorTable extends Migration
             $table->unsignedInteger('status')->default(1)->comment('状态');
             $table->dateTime('end_time')->comment('结束时间');
             $table->dateTime('auto_time')->nullable()->comment('自动成团时间');
-            $table->unsignedTinyInteger('status')->comment('状态');
             $table->timestamps();
         });
     }

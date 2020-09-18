@@ -38,12 +38,11 @@ Route::group([
     $router->resource('category','CategoryController');
     //  商品管理
     $router->resource('products', 'ProductController');
-    /******************** 商品管理 end ********************* */
-
-
-    /******************** 积分商品管理 start ********************* */
+    //  积分商品管理
     $router->resource('integral-goods', 'IntegralGoodController');
-    /******************** 积分商品管理 end ********************* */
+    //  团购商品管理
+    $router->resource('group-goods','GroupGoodController');
+    /******************** 商品管理 end ********************* */
 
 
     /******************** 运费模板管理 start ********************* */
@@ -57,6 +56,8 @@ Route::group([
     $router->resource('order/order-list','OrderController');
     //  积分商城订单列表
     $router->resource('order/integral-goods-order', 'IntegralGoodsOrderController');
+    //  拼团订单
+    $router->resource('order/group-order','GroupOrderController');
     /******************** 订单管理 end ********************* */
 
 

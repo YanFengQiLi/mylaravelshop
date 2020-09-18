@@ -41,6 +41,13 @@ Form::resolving(function (Form $form) {
     });
 });
 
+//  查看初始化
+Show::resolving(function (Show $show) {
+    $show->disableDeleteButton();
+
+    $show->disableEditButton();
+});
+
 //  自定义头部导航
 Admin::navbar(function (Navbar $navbar) {
     //  获取后台管理员未读消息

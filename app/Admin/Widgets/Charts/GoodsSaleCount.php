@@ -4,6 +4,7 @@
 namespace App\Admin\Widgets\Charts;
 
 
+use App\Models\GroupOrder;
 use App\Models\IntegralGoodsOrder;
 use App\Models\Order;
 use Dcat\Admin\Widgets\ApexCharts\Chart;
@@ -117,15 +118,17 @@ class GoodsSaleCount extends Chart
         //  正常商品
         $productsNum = Order::whereBetween('paid_at', $between)
             ->whereNotIn('pay_status', [BaseOrderService::WAIT_PAYING, BaseOrderService::REFUND_SUCCESS])
-            ->count() > 0 ?: 279;
+            ->count();
 
-        //  TODO 拼团商品
-        $groupNum = 100;
+        //  拼团商品
+        $groupNum = GroupOrder::whereBetween('paid_at', $between)
+            ->whereNotIn('pay_status', [BaseOrderService::WAIT_PAYING, BaseOrderService::REFUND_SUCCESS])
+            ->count();
 
         //  积分商品
         $integralNum = IntegralGoodsOrder::whereBetween('paid_at', $between)
             ->whereNotIn('pay_status', [BaseOrderService::WAIT_PAYING, BaseOrderService::REFUND_SUCCESS])
-            ->count() > 0 ?: 148;
+            ->count();
 
 
         $data = config('app.is_mock') ? mock_random_number_array(3,1000, 5000) : [$productsNum, $groupNum, $integralNum];
