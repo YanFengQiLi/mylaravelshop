@@ -16,6 +16,8 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
+        "pavel-mironchik/laravel-backup-panel": "^1.5",
+        "spatie/laravel-backup": "^6.11",
         "tymon/jwt-auth": "1.*@rc",
         "zgldh/qiniu-laravel-storage": "^0.10.3"
     },

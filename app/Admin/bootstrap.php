@@ -64,3 +64,5 @@ Admin::navbar(function (Navbar $navbar) {
     ]));
 });
 
+Admin::style('.main-footer {display:none;}[class*=sidebar-dark-] .navbar-header{padding:.35rem 1rem 0;height:auto !important;background:#1e1e2d}');
+
