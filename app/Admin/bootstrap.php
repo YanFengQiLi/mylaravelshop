@@ -9,8 +9,6 @@ use Dcat\Admin\Layout\Navbar;
 use App\Models\AdminMessage;
 
 /**
- * Dcat-admin - admin builder based on Laravel.
- * @author jqh <https://github.com/jqhph>
  *
  * Bootstraper for Admin.
  *
@@ -65,4 +63,3 @@ Admin::navbar(function (Navbar $navbar) {
 });
 
 Admin::style('.main-footer {display:none;}[class*=sidebar-dark-] .navbar-header{padding:.35rem 1rem 0;height:auto !important;background:#1e1e2d}');
-
