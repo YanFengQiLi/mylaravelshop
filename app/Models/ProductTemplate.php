@@ -5,6 +5,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ProductTemplate
+ *
+ * @property int $id
+ * @property string $title 模板名称
+ * @property int $type 类型
+ * @property int|null $status 状态 1-启用 0-禁用
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\ProductTemplateRule|null $templateRule
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductTemplate whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class ProductTemplate extends Model
 {
 

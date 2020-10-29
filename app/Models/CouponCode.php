@@ -40,6 +40,10 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CouponCode whereUsed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CouponCode whereValue($value)
  * @mixin \Eloquent
+ * @property string|null $use_type 使用范围 all-全品类 special-特定商品
+ * @property string|null $use_type_id 特定商品祖父级ID数组
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CouponCode whereUseType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CouponCode whereUseTypeId($value)
  */
 class CouponCode extends Model
 {

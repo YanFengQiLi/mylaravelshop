@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Member $member
  */
 class MemberIntegral extends Model
 {

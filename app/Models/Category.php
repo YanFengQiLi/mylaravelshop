@@ -27,6 +27,8 @@ namespace App\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $deep 层级深度
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereDeep($value)
  */
 
 use Dcat\Admin\Traits\ModelTree;

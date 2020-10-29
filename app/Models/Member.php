@@ -44,6 +44,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Member withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Member withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member status()
  */
 class Member extends Authenticatable implements JWTSubject
 {
