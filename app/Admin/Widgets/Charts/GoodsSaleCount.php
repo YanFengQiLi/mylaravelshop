@@ -97,7 +97,8 @@ class GoodsSaleCount extends Chart
     {
         $today = date('Y-m-d');
 
-        switch ($number = (int)$request->get('option')) {
+        //  option
+        switch ($number = (int)$request->get('goods')) {
             case 30:
             case 90:
                 $beforeDate = strtotime("-$number day", strtotime($today));

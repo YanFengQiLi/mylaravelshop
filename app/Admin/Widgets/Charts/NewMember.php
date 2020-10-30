@@ -57,7 +57,7 @@ class NewMember extends Chart
     {
         $today = date('Y-m-d');
 
-        $number = (int)$request->get('option', 7);
+        $number = (int)$request->get('members', 7);
 
         switch ($number) {
             case 30:

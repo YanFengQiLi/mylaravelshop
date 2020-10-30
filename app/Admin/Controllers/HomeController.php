@@ -24,14 +24,14 @@ class HomeController extends Controller
                     $column->row($this->getMemberGrowth());
 
                     $column->row(
-                        $this->generateChartAndDropdownWidget(GoodsSaleCount::class, 'goods-sale', '商品总销量一览图')
+                        $this->generateChartAndDropdownWidget(GoodsSaleCount::class, 'goods-sale', '商品总销量一览图', 'goods')
                     );
                 });
 
                 $row->column(6, function (Column $column) {
                     $column->row(function (Row $row) {
                         $row->column(
-                            12, $this->generateChartAndDropdownWidget(NewMember::class, 'new-member', '新增用户变化趋势图')
+                            12, $this->generateChartAndDropdownWidget(NewMember::class, 'new-member', '新增用户变化趋势图', 'members')
                         );
                     });
                 });
@@ -50,7 +50,7 @@ class HomeController extends Controller
         $member = new Member();
 
         $count = [
-            'day' => $member->countNewMember(),
+            'day' => $member->countNewMember('day'),
             'month' => $member->countNewMember('month'),
             'year' => $member->countNewMember('year'),
         ];
@@ -73,9 +73,10 @@ class HomeController extends Controller
      * @param $chart
      * @param $boxId
      * @param $title
+     * @param $option
      * @return Box
      */
-    public function generateChartAndDropdownWidget($chart, $boxId, $title)
+    public function generateChartAndDropdownWidget($chart, $boxId, $title, $option)
     {
         $options = [
             '7' => '最近7天',
@@ -88,8 +89,8 @@ class HomeController extends Controller
         $dropdown = Dropdown::make($options)
             ->button(current($options))
             ->click()
-            ->map(function ($item, $index) {
-                return "<a class='switch-bar' data-option='{$index}'>{$item}</a>";
+            ->map(function ($item, $index) use ($option) {
+                return "<a class='switch-bar' data-{$option}='{$index}'>{$item}</a>";
             });
 
         $bar = $chart::make()
