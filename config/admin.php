@@ -305,10 +305,18 @@ return [
     | Admin map field provider
     |--------------------------------------------------------------------------
     |
-    | Supported: "tencent", "google", "yandex".
+    | Supported: "tencent", "google", "yandex", "baidu".
     |
     */
-    'map_provider' => 'google',
+    'map' => [
+        'provider' => 'baidu',
+
+        'keys' => [
+            'tencent' => env('TENCENT_MAP_API_KEY'),
+            'google' => env('GOOGLE_API_KEY'),
+            'baidu' => env('BAIDU_MAP_API_KEY'),
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -324,10 +332,11 @@ return [
         'body_class' => '',
 
         'sidebar_collapsed' => false,
-        //  左侧菜单深色模式
-        'sidebar_dark' => false,
-        //  开启后会在页面顶部导航栏中增加一个开关按钮，点击可以切换深色和明亮模式(月亮和太阳的图标)
-        'dark_mode_switch' => true,
+
+        // light, primary, dark
+        'sidebar_style' => 'light',
+
+        'dark_mode_switch' => false,
 
         // bg-primary, bg-info, bg-warning, bg-success, bg-danger, bg-dark
         'navbar_color' => '',

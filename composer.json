@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.2",
         "changzhong/extension-iframe-tabs": "^1.0",
-        "dcat/laravel-admin": "^1.7",
+        "dcat/laravel-admin": "1.7.7",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
         "laravel/framework": "^6.2",

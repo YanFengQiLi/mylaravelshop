@@ -31,11 +31,7 @@ return [
         'root'     => '顶级',
         'scaffold' => '代码生成器',
     ],
-
     'options' => [
-        'permissions' => [
-
-        ],
+        //
     ],
-
 ];
