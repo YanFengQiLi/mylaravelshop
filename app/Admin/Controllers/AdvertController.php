@@ -69,7 +69,9 @@ class AdvertController extends AdminController
             $form->text('title')->required();
             $form->select('type')->options(AdvertModel::TYPE)->required();
             $form->url('links');
-            $form->image('image')->rules('required', ['required' => '请上传图片']);
+            $form->image('image')->rules('required', ['required' => '请上传图片'])
+                ->disableRemove()
+                ->url('/uploadFile');
             $form->number('sort')->min(0);
             $form->switch('status','是否启用');
         });

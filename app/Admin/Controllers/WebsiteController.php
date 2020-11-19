@@ -69,13 +69,13 @@ class WebsiteController extends AdminController
 
             $form->tab('基本设置', function (Form $form) use ($web) {
                 //  此处赋值必须这么写, 查看 Form/Field/File.php : initialPreviewConfig 方法需要的是一个数组
-                $form->image('logo', 'logo')->value(['logo' => $web['logo']]);
+                $form->image('logo', 'logo')->disableRemove()->url('/uploadFile')->value(['logo' => $web['logo']]);
 
                 $form->text('shop_name', '网站名称')->value($web['shop_name']);
             })
             ->tab('协议设置', function (Form $form) use ($web) {
-                $form->editor('member_agree', '用户协议')->value($web['member_agree']);
-                $form->editor('register_agree', '隐私协议')->value($web['register_agree']);
+                $form->editor('member_agree', '用户协议')->imageUrl('/uploadFile')->value($web['member_agree']);
+                $form->editor('register_agree', '隐私协议')->imageUrl('/uploadFile')->value($web['register_agree']);
             })
             ->tab('商城设置', function (Form $form) use ($web) {
                 $form->radio('register_integral', '新人注册送积分')
@@ -146,6 +146,8 @@ class WebsiteController extends AdminController
             });
 
             $form->disableListButton();
+
+            $form->disableResetButton();
         });
     }
 }

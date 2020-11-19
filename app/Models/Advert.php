@@ -54,11 +54,6 @@ class Advert extends Model
         self::MID => '首页中间活动位广告',
     ];
 
-    public function getImageAttribute($value)
-    {
-        return env('APP_URL') .'uploads/'. $value;
-    }
-
     /**
      * 只查询启用的
      * @param $query

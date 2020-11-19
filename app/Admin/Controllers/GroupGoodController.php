@@ -3,10 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\GroupGood;
+use Dcat\Admin\Controllers\AdminController;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
-use Dcat\Admin\Controllers\AdminController;
 
 class GroupGoodController extends AdminController
 {
@@ -20,7 +20,7 @@ class GroupGoodController extends AdminController
         return Grid::make(new GroupGood(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('title');
-            $grid->column('thumb')->image('',100,100);
+            $grid->column('thumb')->image('', 100, 100);
             $grid->column('on_sale')->switch();
             $grid->column('description')->display('点击查看')->modal('商品详情', function () {
                 return $this->description;
@@ -39,8 +39,8 @@ class GroupGoodController extends AdminController
                 0 => 'danger',
                 1 => 'success'
             ]);
-            $grid->column('auto_hour')->display(function ($auto_hour){
-                return $auto_hour. '小时';
+            $grid->column('auto_hour')->display(function ($auto_hour) {
+                return $auto_hour . '小时';
             });
             $grid->column('sort');
             $grid->column('created_at');
@@ -62,21 +62,21 @@ class GroupGoodController extends AdminController
                     1 => '已开启'
                 ]);
 
-                $filter->whereBetween('end_time', function ($query){
+                $filter->whereBetween('end_time', function ($query) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
 
                     if ($start) {
-                        $query->where('end_time', '>=', $start.' 00:00:00');
+                        $query->where('end_time', '>=', $start . ' 00:00:00');
                     }
 
                     if ($end) {
-                        $query->where('end_time', '<=', $end.' 23:59:59');
+                        $query->where('end_time', '<=', $end . ' 23:59:59');
                     }
 
                     if ($start && $end) {
                         $query->whereBetween('end_time', [
-                            $start.' 00:00:00', $end.' 23:59:59'
+                            $start . ' 00:00:00', $end . ' 23:59:59'
                         ]);
                     }
                 })->date();
@@ -96,8 +96,8 @@ class GroupGoodController extends AdminController
         return Show::make($id, new GroupGood(), function (Show $show) {
             $show->field('id');
             $show->field('title');
-            $show->field('thumb')->image('','100',100);
-            $show->field('images')->image('','100',100);
+            $show->field('thumb')->image('', '100', 100);
+            $show->field('images')->image('', '100', 100);
             $show->field('description')->unescape();
             $show->field('old_price');
             $show->field('group_price');
@@ -131,11 +131,25 @@ class GroupGoodController extends AdminController
     {
         return Form::make(new GroupGood(), function (Form $form) {
             $form->text('title')->required();
-            $form->image('thumb')->required();
-            $form->multipleImage('images')->saveAsJson()->required()->help('按住 Ctrl 键,进行多选');
-            $form->editor('description')->required();
-            $form->currency('old_price')->width(4);
-            $form->currency('group_price')->width(4);
+            $form->image('thumb')
+                ->required()
+                ->disableRemove()
+                ->url('uploadFile');;
+            $form->multipleImage('images')
+                ->saveAsJson()
+                ->required()
+                ->help('按住 Ctrl 键,进行多选')
+                ->disableRemove()
+                ->url('uploadFile');
+            $form->editor('description')->imageUrl('/uploadFile')->required();
+            $form->currency('old_price')->width(4)->rules('required|min:0.01', [
+                'required' => '请输入原价',
+                'min' => '价格最低设置为0.01元',
+            ]);
+            $form->currency('group_price')->width(4)->rules('required|min:0.01', [
+                'required' => '请输入原价',
+                'min' => '价格最低设置为0.01元',
+            ]);
             $form->number('stock')->rules('required|numeric|min:0', [
                 'required' => '请填写库存',
                 'number' => '库存必须为数字',
@@ -147,12 +161,13 @@ class GroupGoodController extends AdminController
                 'number' => '成团人数必须为数字',
                 'between' => '成团人数在 2 ~ 10 人之间的数字',
             ])
-            ->default(2)->min(2)
-            ->help('多少人可拼成团, 从营销考虑, 成团人数设置区间在 2 ~ 10 之间的数字');
+                ->default(2)->min(2)
+                ->help('多少人可拼成团, 从营销考虑, 成团人数设置区间在 2 ~ 10 之间的数字');
             $form->date('end_time')
+                ->required()
                 ->options(['minDate' => date('Y-m-d')])
                 ->help('到该日期后, 拼团活动结束')
-                ->saving(function ($end){
+                ->saving(function ($end) {
                     return $end . ' 23:59:59';
                 });
             $form->radio('is_auto')

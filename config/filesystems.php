@@ -51,7 +51,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -67,17 +67,17 @@ return [
 
         //  七牛云储存
         'qiniu' => [
-            'driver'  => 'qiniu',
+            'driver' => 'qiniu',
             'domains' => [
-                'default'   => 'imgs.5i71.org', //你的七牛域名
-                'https'     => 'imgs.5i71.org', //你的HTTPS域名
-                'custom'    => 'imgs.5i71.org', //你的自定义域名
+                'default' => env('QINIU_DOMAIN'), //你的七牛域名
+                'https' => env('QINIU_DOMAIN'), //你的HTTPS域名
+                'custom' => env('QINIU_DOMAIN'), //自定义域名无用,与default保持一致就行
             ],
-            'access_key'=> '2nmsHNqsA-ogx7Lm7SE6qFlSMtTZBa5_pgNmHTsR',  //AccessKey
-            'secret_key'=> 'fszL5lI75cQ3kPhpVh_NUjMxl_vUj0OIcLz-KQOE',  //SecretKey
-            'bucket'    => 'zhongqing',  //Bucket名字
-            'notify_url'=> '',  //持久化处理回调地址
-            'url'       => 'http://imgs.5i71.org/',  // 填写文件访问根url
+            'access_key' => env('QINIU_AK'),  //AccessKey
+            'secret_key' => env('QINIU_SK'),  //SecretKey
+            'bucket' => env('QINIU_BUCKET'),  //Bucket名字
+            'notify_url' => '',  //持久化处理回调地址
+            'url' => 'http://' . env('QINIU_DOMAIN') . '/',  // 填写文件访问根url
         ],
 
         //  后台文件上传
@@ -85,7 +85,7 @@ return [
             'driver' => 'local',
             'root' => public_path('uploads'),
             'visibility' => 'public',
-            'url' => env('APP_URL').'/uploads',
+            'url' => env('APP_URL') . '/uploads',
         ],
     ],
 

@@ -106,13 +106,17 @@ class ProductController extends AdminController
                 ->required();
             $form->select('category_id')->required();
             $form->editor('description')->required();
-            $form->image('image')->uniqueName()
+            $form->image('image')
+//                ->disableRemove()
+                ->url('/uploadFile')
                 ->accept(config('filesystems.images_config.mime_type'))
                 ->maxSize(config('filesystems.images_config.max_size'))
                 ->rules('required', [
                     'required' => '请上传' . admin_trans_field('image')
                 ]);
-            $form->multipleImage('pictures')->uniqueName()
+            $form->multipleImage('pictures')
+//                ->disableRemove()
+                ->url('/uploadFile')
                 ->limit(5)
                 ->rules('required', [
                     'required' => '请上传' . admin_trans_field('image')
@@ -133,12 +137,15 @@ class ProductController extends AdminController
                     ->rules('required', [
                         'required' => '请填写' . trans('product-sku.fields.price')
                     ]);
-                $form->number('stock', trans('product-sku.fields.stock'))->min(0)
+                $form->number('stock', trans('product-sku.fields.stock'))
+                    ->min(0)
                     ->rules('required|gt:0', [
                         'required' => '请填写' . trans('product-sku.fields.stock'),
                         'gt' => trans('product-sku.fields.stock') . '必须大于等于0'
                     ]);
-                $form->image('img', trans('product-sku.fields.img'))->uniqueName()
+                $form->image('img', trans('product-sku.fields.img'))
+                    ->disableRemove()
+                    ->url('/uploadFile')
                     ->accept(config('filesystems.images_config.mime_type'))
                     ->maxSize(config('filesystems.images_config.max_size'))
                     ->rules('required', [

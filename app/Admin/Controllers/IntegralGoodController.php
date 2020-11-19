@@ -116,10 +116,14 @@ class IntegralGoodController extends AdminController
             $form->currency('price')->width(4)->required();
             $form->switch('on_sale');
             $form->image('thumb')->help('单张图片')
-                ->rules(['required'], ['required' => '请上传图片']);
+                ->rules(['required'], ['required' => '请上传图片'])
+                ->disableRemove()
+                ->url('/uploadFile');
             $form->multipleImage('pictures')->help('按住键盘的 Ctrl 键 ,选择多张图片')
-                ->rules(['required'], ['required' => '请上传图片']);
-            $form->editor('description')->required();
+                ->rules(['required'], ['required' => '请上传图片'])
+                ->disableRemove()
+                ->url('/uploadFile');
+            $form->editor('description')->imageUrl('/uploadFile')->required();
             $form->radio('type')
                 ->when(IntegralGoodModel::MONEY_EXCHANGE, function (Form $form) {
                     $form->currency('money')->width(4)

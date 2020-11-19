@@ -93,6 +93,7 @@ Route::group([
     });
     /******************** select api接口  end ********************* */
 
-
+    //  后台上传接口
+    $router->any('uploadFile','UploadsController@handle');
 
 });

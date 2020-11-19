@@ -1,7 +1,7 @@
 <?php
 return [
     'iframe-tabs' => [
-        'enable' => true,
+        'enable' => false,
         'home_action' => 'App\Admin\Controllers\HomeController@index',
         'home_title' => 'Home',
         'home_icon' => 'fa-home',
