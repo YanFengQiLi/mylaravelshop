@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b706348f411fb57c3a692f96cf299cc9",
+    "content-hash": "3b2fcb186f6ed60cd6c8712a09449b4b",
     "packages": [
         {
             "name": "changzhong/extension-iframe-tabs",
@@ -59,16 +59,16 @@
         },
         {
             "name": "dcat/laravel-admin",
-            "version": "1.7.7",
+            "version": "1.7.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jqhph/dcat-admin.git",
-                "reference": "b48b2ad537d52516e868e0d98a4c7fa468d1e046"
+                "reference": "dabd5f14133e7b7e906b57aa4f7ed536ee052ead"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jqhph/dcat-admin/zipball/b48b2ad537d52516e868e0d98a4c7fa468d1e046",
-                "reference": "b48b2ad537d52516e868e0d98a4c7fa468d1e046",
+                "url": "https://api.github.com/repos/jqhph/dcat-admin/zipball/dabd5f14133e7b7e906b57aa4f7ed536ee052ead",
+                "reference": "dabd5f14133e7b7e906b57aa4f7ed536ee052ead",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -127,7 +127,7 @@
                 "laravel",
                 "laravel admin"
             ],
-            "time": "2020-10-29T14:13:34+00:00"
+            "time": "2020-12-24T13:51:01+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
