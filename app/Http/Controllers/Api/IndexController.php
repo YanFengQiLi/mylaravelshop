@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Advert;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -17,6 +18,19 @@ class IndexController extends Controller
     public function getIndexBannerList(Advert $advert)
     {
         $data = $advert->getAdvertList();
+
+        return api_response(200, $data, '获取成功');
+    }
+
+    /**
+     * @author zhenhong~
+     * 获取首页商品分类
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getIndexGoodsCategoryPushList(Category $category)
+    {
+        $data = $category->getCategoryList(['is_index_show' => 1]);
 
         return api_response(200, $data, '获取成功');
     }

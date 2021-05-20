@@ -40,5 +40,10 @@ class Category extends Model
 
     protected $table = 'categories';
 
-
+    public function getCategoryList(array $where = [])
+    {
+        return self::query()->where($where)->get([
+            'id', 'parent_id', 'order', 'title', 'is_index_show'
+        ]);
+    }
 }

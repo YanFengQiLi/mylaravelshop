@@ -34,7 +34,9 @@ class UploadsController
 
         $result = $disk->putFileAs($dir, $file, $newName);
 
-        $path = "{$dir}/$newName";
+        $baseUrl = config('filesystems.disks.qiniu.url');
+
+        $path = $baseUrl. $dir . '/' .$newName;
 
         return $result
             ? $this->responseUploaded($path, $disk->url($path))

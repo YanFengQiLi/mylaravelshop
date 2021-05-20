@@ -2,11 +2,14 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Tree\SetCategoryTop;
 use App\Admin\Repositories\Category;
 use Dcat\Admin\Form;
+use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use App\Models\Category as CategoryModel;
+use Dcat\Admin\Traits\HasFormResponse;
 use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Tree;
@@ -21,18 +24,33 @@ use Dcat\Admin\Layout\Row;
  */
 class CategoryController extends AdminController
 {
+    use HasFormResponse;
+
     public function index(Content $content)
     {
-        return $content->header('树状模型')
-            ->body(function (Row $row) {
-                $tree = new Tree(new Category);
+        $grid = Grid::make(new Category(), function (Grid $grid) {
+            $grid->title->tree(true);
 
-                $tree->branch(function ($branch) {
-                    return "{$branch['title']}";
-                });
+            $grid->disableBatchActions();
 
-                $row->column(12, $tree);
+            $grid->disableRowSelector();
+
+            $grid->enableDialogCreate();
+
+            $grid->disableViewButton();
+
+            $grid->column('is_index_show', '是否在首页显示')->if(function () {
+                $parentId = $this->parent_id;
+
+                return $parentId === 0 ? true : false;
+            })->then(function (Grid\Column $column) {
+                $column->switch('green');
+            })->else(function (Grid\Column $column) {
+                $column->emptyString();
             });
+        });
+
+        return $content->header('商品分类管理')->body($grid);
     }
 
     /**
@@ -69,6 +87,7 @@ class CategoryController extends AdminController
             });
             $form->number('order')->min(0);
             $form->text('title')->required();
+            $form->hidden('is_index_show');
         });
     }
 
