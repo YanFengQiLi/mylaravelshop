@@ -36,7 +36,9 @@ Route::namespace('Api')->group(function () {
     //  首页banner轮播
     Route::get('index/getIndexBannerList', 'IndexController@getIndexBannerList');
     //  获取首页商品分类
-    Route::get('index/getIndexGoodsCategoryPushList', 'IndexController@getIndexGoodsCategoryPushList');
+    Route::get('index/getIndexGoodsCategoryList', 'IndexController@getIndexGoodsCategoryList');
+    //  获取首页推荐商品分类菜单
+    Route::get('index/getIndexShowGoodsCategoryNav', 'IndexController@getIndexShowGoodsCategoryNav');
     //  签到
     Route::group([
         'prefix' => 'index',

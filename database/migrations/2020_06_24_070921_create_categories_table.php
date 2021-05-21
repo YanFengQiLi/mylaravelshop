@@ -21,6 +21,7 @@ class CreateCategoriesTable extends Migration
             $table->unsignedInteger('parent_id')->default(0)->comment('父级ID');
             $table->unsignedInteger('order')->default(0)->comment('排序');
             $table->string('title')->comment('分类标题');
+            $table->string('icon')->nullable()->comment('图标');
             $table->tinyInteger('is_index_show')->default(0)->comment('是否设置为首页显示 0-否 1-是');
             $table->timestamps();
         });

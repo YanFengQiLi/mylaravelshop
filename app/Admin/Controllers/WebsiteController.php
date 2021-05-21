@@ -26,13 +26,16 @@ class WebsiteController extends AdminController
         'sign_rule' => 'add',
         'fix_number' => '0',
         'member_agree' => '',
-        'register_agree' => ''
+        'register_agree' => '',
+        'consume_integral_sign' => '0',
+        'consume_integral' => '1',
+        'consume_integral_percent' => '1',
     ];
 
     public function index(Content $content)
     {
         return $content
-            ->title('网站设置')
+            ->title('商城配置')
             ->body($this->form());
     }
 
@@ -60,7 +63,7 @@ class WebsiteController extends AdminController
     {
         $webModel = new WebModel();
 
-        $data = $webModel->getWebSiteConfig();
+        $data = $webModel::getWebSiteConfig();
 
         $web = $data + $this->configArr;
 
@@ -131,6 +134,26 @@ class WebsiteController extends AdminController
                     ])->default(0)
                     ->value($web['integral_money'])
                     ->help('开启后,下单时可以使用积分抵扣现金');
+
+                $form->radio('consume_integral_sign','购买正常商品送积分')
+                    ->when(0, function (Form $form) use ($web){
+                        $form->number('consume_integral','固定积分数值')
+                            ->min(1)
+                            ->value($web['consume_integral'])
+                            ->help('不论实际下单支付金额是多少, 只获得固定的积分');
+                    })
+                    ->when(1, function (Form $form) use ($web){
+                        $form->number('consume_integral_percent','百分比数值')
+                            ->min(1)
+                            ->max(100)
+                            ->value($web['consume_integral_percent'])
+                            ->help('如实际下单支付金额为 ¥123, 百分比数值设置为 10 , 则获得 12 积分');
+                    })
+                    ->options([
+                        0 => '固定积分',
+                        1 => '按实际下单金额的百分比四舍五入'
+                    ])->default(0)
+                    ->value($web['consume_integral_sign']);
             })
             ->tab('签到设置', function (Form $form) use ($web) {
                 $form->radio('sign_rule', '签到规则')

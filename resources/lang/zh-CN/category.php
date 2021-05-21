@@ -9,6 +9,7 @@ return [
         'parent_id' => '父级ID',
         'order' => '排序',
         'title' => '分类标题',
+        'icon' => '分类图标',
     ],
     'options' => [
         'Category' => '商品分类'

@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\Tree\SetCategoryTop;
 use App\Admin\Repositories\Category;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -12,8 +11,6 @@ use App\Models\Category as CategoryModel;
 use Dcat\Admin\Traits\HasFormResponse;
 use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
-use Dcat\Admin\Tree;
-use Dcat\Admin\Layout\Row;
 
 /**
  * @author zhenhong~
@@ -38,6 +35,14 @@ class CategoryController extends AdminController
             $grid->enableDialogCreate();
 
             $grid->disableViewButton();
+
+            $grid->column('icon', '图标')->if(function (Grid\Column $column) {
+                return $column->getValue() ?? '';
+            })->then(function (Grid\Column $column) {
+                $column->display($this->icon)->image('', 32,32);
+            })->else(function (Grid\Column $column) {
+                $column->emptyString();
+            });
 
             $grid->column('is_index_show', '是否在首页显示')->if(function () {
                 $parentId = $this->parent_id;
@@ -85,9 +90,10 @@ class CategoryController extends AdminController
             $form->select('parent_id', '选择分类')->options(function () {
                 return CategoryModel::selectOptions();
             });
+            $form->image('icon', '图标')->url('/uploadFile')->rules('required', ['required' => '请上传分类图标'])->help('分类图标最佳尺寸为 37 * 37');
             $form->number('order')->min(0);
             $form->text('title')->required();
-            $form->hidden('is_index_show');
+            $form->hidden('is_index_show')->default(0);
         });
     }
 

@@ -28,7 +28,20 @@ class IndexController extends Controller
      * @param Category $category
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getIndexGoodsCategoryPushList(Category $category)
+    public function getIndexGoodsCategoryList(Category $category)
+    {
+        $data = $category->getCategoryList(['parent_id' => 0]);
+
+        return api_response(200, $data, '获取成功');
+    }
+
+    /**
+     * @author zhenhong~
+     * 获取首页推荐商品分类菜单
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getIndexShowGoodsCategoryNav(Category $category)
     {
         $data = $category->getCategoryList(['is_index_show' => 1]);
 
