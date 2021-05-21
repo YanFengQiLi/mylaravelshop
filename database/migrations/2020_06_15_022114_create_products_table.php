@@ -33,6 +33,8 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('category_id')->comment('子级ID');
             $table->string('concat_id')->comment('以逗号连接分类ID');
             $table->unsignedTinyInteger('product_template_id')->comment('运费模板ID');
+            $table->tinyInteger('is_join_vip')->default(0)->comment('是否参与 vip 年卡活动,0-否 1-是');
+            $table->tinyInteger('is_join_integral')->default(0)->comment('是否参与下单得积分活动,0-否 1-是');
             $table->timestamps();
         });
     }
