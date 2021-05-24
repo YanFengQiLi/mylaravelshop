@@ -38,6 +38,8 @@ Route::group([
     $router->resource('category','CategoryController');
     //  商品管理
     $router->resource('products', 'ProductController');
+    //  商品服务管理
+    $router->resource('products-service','ProductsServiceController');
     //  积分商品管理
     $router->resource('integral-goods', 'IntegralGoodController');
     //  团购商品管理
@@ -88,8 +90,10 @@ Route::group([
         $router->get('product-template', 'ProductTemplateController@getProductTemplate');
         //  获取广告类型
         $router->get('advert-type', 'AdvertTypeController@getAdvertType');
-        //  优惠券多选选择
+        //  优惠券多选
         $router->get('coupon-select', 'CouponCodeController@getCouponSelect');
+        //  商品服务多选
+        $router->get('products-service', 'ProductsServiceController@getProductServiceSelectList');
     });
     /******************** select api接口  end ********************* */
 

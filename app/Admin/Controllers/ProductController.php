@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Renderable\ProductTemplateTable;
 use App\Admin\Repositories\Product;
+use App\Models\ProductsService;
 use App\Models\ProductTemplate;
 use App\Models\Website;
 use Dcat\Admin\Form;
@@ -123,14 +124,17 @@ class ProductController extends AdminController
             //  必须设置此字段,否则在事件中保存不了
             $form->hidden('concat_id');
             $form->switch('on_sale', '是否上架');
-            $form->radio('is_join_vip','是否参与 vip 年卡活动')->options([0 => '否', 1 => '是'])
+            $form->radio('is_join_vip')->options([0 => '否', 1 => '是'])
                 ->default(0)->help('当选择参与,则表示只要用户购买了VIP年卡且在有效期内,则享受年卡的所有优惠活动');
-            $form->radio('is_join_integral','是否参加用户下单送积分活动')
+            $form->radio('is_join_integral')
                 ->options([0 => '否', 1 => '是'])
                 ->default(0)
                 ->when(1, function (Form $form) {
                     return $form->html(Website::getWebSiteConsumeIntegralDesc());
                 });
+            $form->multipleSelect('service')->options('/api/products-service')->saving(function ($value) {
+                return implode(',', $value);
+            })->required()->help('多选');
             $form->hasMany('sku', '添加商品属性', function (Form\NestedForm $form) {
                 $form->text('title', trans('product-sku.fields.title'))
                     ->rules('required', [

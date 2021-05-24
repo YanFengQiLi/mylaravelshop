@@ -17,7 +17,10 @@ return [
         'grand_id' => '顶级分类',
         'parent_id' => '父级分类',
         'category_id' => '子级分类',
-        'product_template_id' => '运费模板'
+        'product_template_id' => '运费模板',
+        'is_join_vip' => '是否参与 vip 年卡活动',
+        'is_join_integral' => '是否参加用户下单送积分活动',
+        'service' => '商品服务',
     ],
     'options' => [
     ],

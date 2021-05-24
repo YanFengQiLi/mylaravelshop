@@ -39,6 +39,8 @@ Route::namespace('Api')->group(function () {
     Route::get('index/getIndexGoodsCategoryList', 'IndexController@getIndexGoodsCategoryList');
     //  获取首页推荐商品分类菜单
     Route::get('index/getIndexShowGoodsCategoryNav', 'IndexController@getIndexShowGoodsCategoryNav');
+    //  获取首页热卖商品
+    Route::get('index/getIndexShopHotSales', 'IndexController@getIndexShopHotSales');
     //  签到
     Route::group([
         'prefix' => 'index',
@@ -59,4 +61,8 @@ Route::namespace('Api')->group(function () {
         Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
     });
     /********************** 个人中心 end **************************/
+
+    /********************** 分类 start **************************/
+    Route::get('cate/getTabBarGoodsCategoryList', 'CategoryController@getTabBarGoodsCategoryList');
+    /********************** 分类 end **************************/
 });
