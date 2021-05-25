@@ -14,6 +14,8 @@ class ProductService {
     /**
      * @param int $limit
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * 获取热销商品
+     * @author zhenhong~
      */
     public function getProductHotList($limit = 10)
     {
@@ -22,4 +24,16 @@ class ProductService {
            ->select(['id', 'title', 'price', 'sold_count', 'image'])
            ->paginate($limit);
     }
+
+    /**
+     * @param $id
+     * @return Product|Product[]|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     * 通过ID获取商品
+     * @author zhenhong~
+     */
+    public function findProductById($id)
+    {
+        return $this->product::query()->find($id);
+    }
+
 }

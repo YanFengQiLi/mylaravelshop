@@ -62,6 +62,11 @@ class Product extends Model
         $this->attributes['pictures'] = json_encode($value);
     }
 
+    public function getPicturesAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+
     public function getImage()
     {
         if (Str::contains($this->image, '//')) {

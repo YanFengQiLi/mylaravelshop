@@ -65,4 +65,13 @@ Route::namespace('Api')->group(function () {
     /********************** 分类 start **************************/
     Route::get('cate/getTabBarGoodsCategoryList', 'CategoryController@getTabBarGoodsCategoryList');
     /********************** 分类 end **************************/
+
+    /********************** 商品 start **************************/
+    Route::group(['prefix' => 'product'], function () {
+        //  商品详情
+        Route::get('getProductDetail', 'ProductController@getProductDetail');
+    });
+
+
+    /********************** 商品 end **************************/
 });
