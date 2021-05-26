@@ -36,6 +36,8 @@ class CategoryController extends AdminController
 
             $grid->disableViewButton();
 
+            $grid->disableDeleteButton();
+
             $grid->column('icon', '图标')->if(function (Grid\Column $column) {
                 return $column->getValue() ?? '';
             })->then(function (Grid\Column $column) {

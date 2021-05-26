@@ -57,6 +57,11 @@ class Product extends Model
         return $this->hasMany(ProductSku::class,'product_id','id');
     }
 
+    public function productTemplate()
+    {
+        return $this->belongsTo(ProductTemplate::class,'product_template_id','id')->select('id', 'title', 'type');
+    }
+
     public function setPicturesAttribute($value)
     {
         $this->attributes['pictures'] = json_encode($value);

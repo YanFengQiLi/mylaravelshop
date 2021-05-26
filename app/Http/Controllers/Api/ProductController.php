@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductsService;
+use App\Services\CouponService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -16,11 +18,18 @@ class ProductController extends Controller
      * @author zhenhong~
      * 获取商品详情
      */
-    public function getProductDetail(ProductService $productService, Request $request)
+    public function getProductDetail
+    (
+        ProductService $productService,
+        CouponService $couponService,
+        Request $request
+    )
     {
         $id = $request->get('id');
 
         $info = $productService->findProductById($id);
+
+        $info->coupon_list = $couponService->getCanUseCouponListByProduct($info);
 
         $service = new ProductsService;
 

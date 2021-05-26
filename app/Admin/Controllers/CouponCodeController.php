@@ -9,7 +9,6 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Controllers\AdminController;
 use App\Models\CouponCode as CouponCodeModel;
-use Illuminate\Http\Request;
 
 class CouponCodeController extends AdminController
 {
@@ -119,15 +118,13 @@ class CouponCodeController extends AdminController
                 ->when(CouponCodeModel::USE_SPECIAL, function (Form $form) {
                     //  树形选择器,提交的数据为数组
                     $form->tree('use_type_id', '选择分类')
-                        ->nodes(function () {
-                            $category = new Category();
-                            return $category->allNodes();
-                        })
-                        ->setTitleColumn('title')
-                        ->disableFilterParents();
+                        ->expand(false)
+                        ->nodes((new Category())->allNodes())
+                        ->setTitleColumn('title');
                 })
                 ->options(CouponCodeModel::USE_TYPE)
-                ->default(CouponCodeModel::USE_ALL);
+                ->default(CouponCodeModel::USE_ALL)
+                ->help('指定商品分类, 只作用于第三级分类');
             $form->radio('type')->options(CouponCodeModel::COUPON_TYPE)->rules('required', [
                 'required' => '请选择券类型'
             ]);
