@@ -29,7 +29,7 @@ class ProductsService extends Model
      */
     public function getProductServiceByIds(...$params)
     {
-        return self::query()->whereIn('id', $params)->where('status', 1)->get(['id', 'icon', 'title']);
+        return self::query()->whereIn('id', $params)->where('status', 1)->get(['id', 'icon', 'title', 'content']);
     }
 
 }

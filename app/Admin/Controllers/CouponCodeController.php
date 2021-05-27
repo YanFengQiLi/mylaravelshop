@@ -152,12 +152,20 @@ class CouponCodeController extends AdminController
                 'numeric' => '必须是数字',
                 'min' => '最低使用金额为 0.01 元'
             ]);
-            $form->datetime('before_time')->format('YYYY-MM-DD HH:mm:00')->rules('nullable|before:after_time', [
-                'before' => trans('coupon-code.fields.before_time') . '必须小于' . trans('coupon-code.fields.after_time')
-            ]);
-            $form->datetime('after_time')->format('YYYY-MM-DD HH:mm:00')->rules('nullable|after:before_time', [
-                'after' => trans('coupon-code.fields.after_time') . '必须大于' . trans('coupon-code.fields.before_time')
-            ]);
+
+            $form->radio('is_limit_time')
+                ->when(1, function (Form $form) {
+                    $form->datetime('before_time')->format('YYYY-MM-DD HH:mm:00')->rules('nullable|before:after_time', [
+                        'before' => trans('coupon-code.fields.before_time') . '必须小于' . trans('coupon-code.fields.after_time')
+                    ]);
+                    $form->datetime('after_time')->format('YYYY-MM-DD HH:mm:00')->rules('nullable|after:before_time', [
+                        'after' => trans('coupon-code.fields.after_time') . '必须大于' . trans('coupon-code.fields.before_time')
+                    ]);
+                })->options([
+                    0 => '不限制',
+                    1 => '限制'
+                ])->default(1);
+
             $form->switch('enable', '是否启用');
 
             $form->saving(function (Form $form) {
@@ -165,8 +173,6 @@ class CouponCodeController extends AdminController
                     $form->code = CouponCodeModel::findAndGenerateCouponCode();
                 }
             });
-
-            $form->title('<span style="color: red">注: 不限制使用时间,开始和结束时间不设置即可</span>');
         });
 
     }

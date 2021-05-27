@@ -27,6 +27,7 @@ class CreateCouponCodesTable extends Migration
             $table->unsignedInteger('total')->comment('券总量');
             $table->unsignedInteger('used')->default(0)->comment('券使用量');
             $table->decimal('min_amount',10,2)->comment('最低使用金额');
+            $table->tinyInteger('is_limit_time')->default(1)->comment('是否限制使用日期 0-否 1-是');
             $table->dateTime('before_time')->nullable()->comment('开始时间');
             $table->dateTime('after_time')->nullable()->comment('结束时间');
             $table->boolean('enable')->comment('是否启动 1-是 0-否');

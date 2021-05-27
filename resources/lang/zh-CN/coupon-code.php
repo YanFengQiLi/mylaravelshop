@@ -17,7 +17,8 @@ return [
         'after_time' => '结束时间',
         'enable' => '是否启用',
         'value_show' => '折扣信息',
-        'use_type' => '使用范围'
+        'use_type' => '使用范围',
+        'is_limit_time' => '是否限制使用日期'
     ],
     'options' => [
     ],

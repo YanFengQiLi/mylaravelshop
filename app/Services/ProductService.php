@@ -33,7 +33,7 @@ class ProductService {
      */
     public function findProductById($id)
     {
-        return $this->product::query()->with('productTemplate')->find($id);
+        return $this->product::query()->with(['productTemplate', 'sku'])->find($id);
     }
 
 }

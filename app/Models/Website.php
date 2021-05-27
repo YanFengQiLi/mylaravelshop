@@ -49,6 +49,17 @@ class Website extends Model
     }
 
     /**
+     * @param mixed ...$params
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     * 获取多个配置
+     * @author zhenhong~
+     */
+    public static function getMoreWebSiteConfig(...$params)
+    {
+        return self::query()->whereIn('key_name', $params)->pluck('key_value', 'key_name')->toArray();
+    }
+
+    /**
      * @return string
      * 获取下单送积分规则描述
      * @author zhenhong~
