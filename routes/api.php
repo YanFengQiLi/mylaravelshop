@@ -70,6 +70,10 @@ Route::namespace('Api')->group(function () {
     Route::group(['prefix' => 'product'], function () {
         //  商品详情
         Route::get('getProductDetail', 'ProductController@getProductDetail');
+        //  添加商品到购物车
+        Route::post('addCartProduct', 'ProductController@addCartProduct')->middleware('jwt');
+        //  修改购物车商品数量
+        Route::put('updateCartProductNumber', 'ProductController@updateCartProductNumber')->middleware('jwt');
     });
 
 

@@ -17,7 +17,7 @@ class JwtToken
      */
     public function handle($request, Closure $next)
     {
-        $token =$request->header('authorization');
+        $token =$request->header('Authorization');
 
         try {
             $info = JWTAuth::setToken($token)->getPayload()->get('sub');
