@@ -5,17 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt', [
-            'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin']
+        $this->middleware('auth:api', [
+            'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin', 'refresh']
         ]);
     }
 
@@ -25,7 +22,7 @@ class AuthController extends Controller
      * @param Member $member
      * @return \Illuminate\Http\JsonResponse
      */
-    public function passwordLogin(Request $request, Member $member)
+    public function passwordLogin(Request $request)
     {
         $data = $request->validate([
             'email' => 'required|email',
@@ -38,19 +35,9 @@ class AuthController extends Controller
             'password.between' => '密码长度只能在6-14之间',
         ]);
 
-        $result = $member->getMemberInfoByData(Arr::except($data, ['password']));
-
-        if (! $result) {
-            return api_response(201, [], '账号不存在');
+        if (! $token = auth('api')->attempt($data)) {
+            return api_response(201, [], '账号或密码错误');
         }
-
-        if (! Hash::check($data['password'], $result->password)) {
-            return api_response(201, [], '密码错误');
-        }
-
-        $payload = JWTFactory::customClaims(['sub' => $result])->make();
-
-        $token = JWTAuth::encode($payload)->get();
 
         return $this->respondWithToken($token);
     }
@@ -68,12 +55,49 @@ class AuthController extends Controller
     }
 
     /**
-     * 返回token
+     * @return \Illuminate\Http\JsonResponse
+     * 退出登录
+     * @author zhenhong~
+     */
+    public function logout()
+    {
+        auth('api')->logout();
+
+        return api_response(200, [], '退出成功');
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * 获取当前用户
+     * @author zhenhong~
+     */
+    public function me()
+    {
+        return api_response(200, auth('api')->user(), '获取成功');
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * 刷新token
+     * @author zhenhong~
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken(auth('api')->refresh());
+    }
+
+    /**
      * @param $token
      * @return \Illuminate\Http\JsonResponse
+     * 返回 token
+     * @author zhenhong~
      */
-    public function respondWithToken($token)
+    protected function respondWithToken($token)
     {
-        return api_response(200, $token, '获取成功');
+        return api_response(200, [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL()
+        ], '获取成功');
     }
 }

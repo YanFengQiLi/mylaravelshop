@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'jwt',  // 设置驱动
-            'provider' => 'members',    //  设置驱动数据表
+            'provider' => 'users',    //  设置驱动数据表
             'hash' => false,
         ],
     ],
