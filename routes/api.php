@@ -1,4 +1,5 @@
 <?php
+request()->headers->set('accept', 'application/json');
 
 use Illuminate\Http\Request;
 
@@ -65,6 +66,7 @@ Route::namespace('Api')->group(function () {
         'prefix' => 'center',
         'middleware' => 'jwt'
     ], function () {
+        //  个人中心
         Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
     });
     /********************** 个人中心 end **************************/
@@ -77,10 +79,13 @@ Route::namespace('Api')->group(function () {
     Route::group(['prefix' => 'product'], function () {
         //  商品详情
         Route::get('getProductDetail', 'ProductController@getProductDetail');
-        //  添加商品到购物车
-        Route::post('addCartProduct', 'ProductController@addCartProduct')->middleware('jwt');
-        //  修改购物车商品数量
-        Route::put('updateCartProductNumber', 'ProductController@updateCartProductNumber')->middleware('jwt');
+
+        Route::group(['middleware' => 'jwt'], function () {
+            //  添加商品到购物车
+            Route::post('addCartProduct', 'ProductController@addCartProduct');
+            //  修改购物车商品数量
+            Route::put('updateCartProductNumber', 'ProductController@updateCartProductNumber');
+        });
     });
 
 

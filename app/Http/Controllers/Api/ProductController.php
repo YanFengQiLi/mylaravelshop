@@ -98,7 +98,7 @@ class ProductController extends Controller
         MemberCartRequest $memberCartRequest
     )
     {
-        $member = request()->attributes->get('member');
+        $member = auth()->user();
 
         $data = $memberCartRequest->validated();
 

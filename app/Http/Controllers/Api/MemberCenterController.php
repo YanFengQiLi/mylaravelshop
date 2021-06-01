@@ -19,7 +19,7 @@ class MemberCenterController extends Controller
      */
     public function getMemberInfo(Request $request)
     {
-        $member = $request->attributes->get('member');
+        $member = auth()->user();
 
         return api_response(200, $member, '获取成功');
     }

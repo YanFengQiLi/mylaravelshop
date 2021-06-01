@@ -28,6 +28,7 @@ class CreateMembersTable extends Migration
             $table->string('photo')->nullable()->comment('头像');
             $table->tinyInteger('status')->default(1)->comment('状态 0-冻结 1-正常');
             $table->unsignedInteger('integral')->default(0)->comment('积分');
+            $table->unsignedInteger('balance')->default(0)->comment('余额');
             $table->timestamps();
             $table->softDeletes();
         });

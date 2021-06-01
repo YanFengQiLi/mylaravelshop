@@ -100,7 +100,7 @@ return [
     | Notice: If you set this to null you should remove 'exp' element from 'required_claims' list.
     |
     */
-    //  设置 token 过期时间 （单位：分钟）
+    //  设置 token 过期时间 （单位：分钟） 有效时间指的的是你获得 token 后，在多少时间内可以凭这个 token 去获取内容，逾时无效。
 //    'ttl' => env('JWT_TTL', 24 * 7 * 60),
     'ttl' => env('JWT_TTL', 1),
 
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    //  刷新时间 (设置一般为，过期时间最小的倍数， 单位：分钟)
+    //  刷新时间 (设置一般为，过期时间最小的倍数， 单位：分钟)   刷新时间指的是在这个时间内可以凭旧 token 换取一个新 token
     'refresh_ttl' => env('JWT_REFRESH_TTL', 24 * 7 * 60 * 2),
 
     /*
@@ -222,7 +222,7 @@ return [
     |
     */
 
-    'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
+    'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', false),
 
     /*
     | -------------------------------------------------------------------------

@@ -6,8 +6,9 @@ use Closure;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
-class JwtToken
+class JwtToken extends BaseMiddleware
 {
     /**
      * JWT 中间件
@@ -26,35 +27,38 @@ class JwtToken
      */
     public function handle($request, Closure $next)
     {
-        $boolean = JWTAuth::parseToken()->check();
+        //  判断当前请求是否携带 token
+        $token = $this->auth->getToken();
 
-        //  校验 token 有效性 (注：此处与过期时间无关, 即便过期也可以使用)
-        if ($boolean === false) {
-            return api_response(203, [], '验证失败, token 无效');
+        if (! $token) {
+            return api_response(201, [], '请求错误');
         }
 
-        //  解析 jwt 载荷
-        $payload = JWTAuth::parseToken()->getPayload();
+        try {
+            // 检测用户的登录状态
+            if ($this->auth->parseToken()->authenticate()) {
+                return $next($request);
+            }
+            return api_response(202, [], '请登录');
+        } catch (TokenExpiredException $exception) {
+            //  捕获 token 过期错误
+            try {
+                // 刷新用户的 token
+                $token = $this->auth->refresh();
 
-        //  $exp-过期时间 $iat-签发时间
-        list($exp, $iat) = [$payload->get('exp'), $payload->get('iat')];
+                $access_token = 'Bearer '.$token;
 
-        //  获取刷新时间
-        $refreshTTL = ( config('jwt.refresh_ttl') * 60 ) + $iat;
+                $request->headers->set('Authorization', $access_token);
 
-        //  获取当前时间
-        $nowTime = time();
-
-        if ($nowTime < $exp && $nowTime <= $refreshTTL) {
-            return $next($request);
-        } elseif ($nowTime > $exp && $nowTime <= $refreshTTL) {
-            $token = JWTAuth::parseToken()->refresh();
-
-            response()->header('Authorization', $token);
-
-            return $next($request);
-        } else {
-            return api_response(202, [], '验证失败, token 过期');
+                // 使用一次性登录以保证此次请求的成功  sub 获取的就是 当前 token 的 `用户ID`
+                \Auth::guard('api')->onceUsingId($this->auth->manager()->getPayloadFactory()->buildClaimsCollection()->toPlainArray()['sub']);
+            } catch (JWTException $JWTException) {
+                //  如果捕获到此异常，即代表 refresh 也过期了，用户无法刷新令牌，需要重新登录
+                return api_response(203, [],'账号信息已过期，请重新登录');
+            }
         }
+
+        //  在响应中添加已经刷新的 token
+        return $this->setAuthenticationHeader($next($request), $token);
     }
 }

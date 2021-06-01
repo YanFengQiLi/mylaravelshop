@@ -11,8 +11,9 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', [
-            'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin', 'refresh']
+        //  auth:api 的 auth 就是 app\Http\Kernel.php $routeMiddleware 数组中的 auth 中间件, `:api` 就是 config\auth.php 的 guards 数组中的 api 看守器
+        $this->middleware('jwt', [
+            'except' => ['passwordLogin', 'mobileLogin', 'weiXinLogin']
         ]);
     }
 
@@ -35,7 +36,7 @@ class AuthController extends Controller
             'password.between' => '密码长度只能在6-14之间',
         ]);
 
-        if (! $token = auth('api')->attempt($data)) {
+        if (! $token = JWTAuth::attempt($data)) {
             return api_response(201, [], '账号或密码错误');
         }
 
@@ -66,25 +67,6 @@ class AuthController extends Controller
         return api_response(200, [], '退出成功');
     }
 
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     * 获取当前用户
-     * @author zhenhong~
-     */
-    public function me()
-    {
-        return api_response(200, auth('api')->user(), '获取成功');
-    }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     * 刷新token
-     * @author zhenhong~
-     */
-    public function refresh()
-    {
-        return $this->respondWithToken(auth('api')->refresh());
-    }
 
     /**
      * @param $token
@@ -94,10 +76,6 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        return api_response(200, [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL()
-        ], '获取成功');
+        return api_response(200, 'Bearer '.$token, '获取成功');
     }
 }
