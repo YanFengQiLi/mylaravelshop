@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Mail;
  */
 class RegisterController extends Controller
 {
-
     /**
-     * 发送邮箱验证码
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * 发送邮箱验证码
+     * @author zhenhong~
      */
     public function sendEmailCode(Request $request)
     {
@@ -58,16 +59,19 @@ class RegisterController extends Controller
     }
 
     /**
-     * 用户邮箱注册
      * @param RegisterRequest $registerRequest
      * @param Member $member
      * @return \Illuminate\Http\JsonResponse
+     * 用户邮箱注册
+     * @author zhenhong~
      */
     public function memberEmailRegister(RegisterRequest $registerRequest, Member $member)
     {
-        $date = $registerRequest->validated();
+        $data = $registerRequest->validated();
 
-        $bool = $member->createMemberByData($date);
+        $data['photo'] = 'http://image.yanfengqili.top/default_photo/head_photo.png';
+
+        $bool = $member->createMemberByData($data);
 
         if ($bool) {
             return api_response(200, [], '注册成功');
