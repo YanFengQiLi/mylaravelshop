@@ -29,12 +29,8 @@ Route::namespace('Api')->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         //  账密登录
         Route::post('passwordLogin', 'AuthController@passwordLogin');
-        //  推出登录
+        //  退出登录
         Route::post('logout', 'AuthController@logout');
-        //  刷新 token
-        Route::post('refresh', 'AuthController@refresh');
-        //  获取用户
-        Route::post('me', 'AuthController@me');
     });
 
     /********************** 登录 end **************************/

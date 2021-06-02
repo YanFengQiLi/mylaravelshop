@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|unique:members,email',
             'code' => 'required',
             'password' => 'required|alpha_dash|between:6,14',
-            'agree' => 'accepted'
+//            'agree' => 'accepted'
         ];
     }
 
@@ -47,7 +47,7 @@ class RegisterRequest extends FormRequest
            'password.required' => '请填写密码',
            'password.alpha_dash' => '密码只允许包含字母、数字，以及破折号 (-) 和下划线 ( _ )',
            'password.between' => '密码长度只能在6-14之间',
-           'agree.accepted' => '请同意用户协议'
+//           'agree.accepted' => '请同意用户协议'
        ];
     }
 

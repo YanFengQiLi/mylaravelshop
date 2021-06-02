@@ -31,9 +31,15 @@ class RegisterController extends Controller
             'email.email' => '邮箱格式错误'
         ]);
 
+        $key = 'email_' . $data['email'];
+
+        if (Cache::store('redis')->get($key)) {
+            return api_response(200, [], '邮件发送成功, 请注意查收');
+        }
+
         $code = generate_rand_number(6);
 
-        Cache::store('redis')->put('email_' . $data['email'], $code, 10 * 60);
+        Cache::store('redis')->put($key, $code, 10 * 60);
 
         $content = '感谢您对' . env('APP_NAME') . '的信任,我将做的更好, 您的验证码为 :' . $code . ' ,10分钟有效, 请勿告诉其他人';
 
