@@ -45,6 +45,9 @@ class MemberCenterController extends Controller
 
         $member->back_change_num = 0;
 
+        //  TODO 获取超级会员天数，计划存 redis
+        $member->super_day = 0;
+
         return api_response(200, $member, '获取成功');
     }
 }
