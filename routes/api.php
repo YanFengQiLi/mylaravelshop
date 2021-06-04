@@ -64,6 +64,8 @@ Route::namespace('Api')->group(function () {
     ], function () {
         //  个人中心
         Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
+        //  设置用户基础信息
+        Route::post('setBaseMemberInfo', 'MemberCenterController@setBaseMemberInfo');
     });
     /********************** 个人中心 end **************************/
 

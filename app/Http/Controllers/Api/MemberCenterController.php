@@ -50,4 +50,11 @@ class MemberCenterController extends Controller
 
         return api_response(200, $member, '获取成功');
     }
+
+    public function setBaseMemberInfo(Request $request)
+    {
+        $type = $request->post('type');
+
+        $arr = ['sex', 'birthday', 'nick_name'];
+    }
 }
