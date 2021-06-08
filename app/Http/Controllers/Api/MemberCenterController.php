@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\MemberService;
 use Illuminate\Http\Request;
 
 /**
@@ -51,10 +52,47 @@ class MemberCenterController extends Controller
         return api_response(200, $member, '获取成功');
     }
 
-    public function setBaseMemberInfo(Request $request)
+    /**
+     * @param MemberService $service
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 设置用户基本资料
+     */
+    public function setBaseMemberInfo(Request $request,MemberService $service)
     {
-        $type = $request->post('type');
+        $type = request('type');
 
-        $arr = ['sex', 'birthday', 'nick_name'];
+        $value = request('value','');
+
+        $arr = ['sex', 'birthday', 'nick_name', 'user_name'];
+
+        if (!in_array($type, $arr)) {
+            return api_response(201, [], '参数错误');
+        }
+
+        switch ($type) {
+            case 'sex':
+                if (!is_numeric($value) || !in_array($value, [0, 1])) return api_response(201, [],'性别错误');
+                break;
+            case 'birthday':
+                if (check_date_valid($value) === false) return api_response(201, [], '日期格式错误');
+                break;
+            case 'nick_name':
+                if (empty($value)) return api_response(201, [], '请填写昵称');
+                break;
+            case 'user_name':
+                if (empty($value)) return api_response(201, [], '请填写姓名');
+                break;
+        }
+
+        $user = auth()->user();
+
+        $bool = $service->updateBaseMemberColumn(['id' => $user->id], $type, $value);
+
+        if ($bool) {
+            return api_response(200, $value, '设置成功');
+        } else {
+            return api_response(201, [], '设置失败');
+        }
     }
 }

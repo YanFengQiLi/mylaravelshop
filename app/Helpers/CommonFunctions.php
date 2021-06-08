@@ -130,3 +130,25 @@ if (!function_exists('mock_random_number_array')) {
        return collect($generator($len))->toArray();
    }
 }
+
+if (!function_exists('check_date_valid')) {
+    /**
+     * 校验日期合法性
+     * @param $data
+     * @param string $format
+     * @return bool
+     */
+    function check_date_valid($data, $format = 'Y-m-d'){
+        $unixTime = strtotime($data);
+
+        if (!$unixTime) {
+            return false;
+        }
+
+        if (date($format, $unixTime) == $data) {
+            return true;
+        }
+
+        return false;
+    }
+}
