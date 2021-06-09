@@ -19,6 +19,9 @@ use Illuminate\Http\Request;
 //});
 
 Route::namespace('Api')->group(function () {
+    /********************** 公共接口 start **************************/
+    Route::post('uploadFile', 'CommonController@uploadFile');
+    /********************** 公共接口 end **************************
 
     /********************** 注册 start **************************/
     Route::post('memberEmailRegister', 'RegisterController@memberEmailRegister');

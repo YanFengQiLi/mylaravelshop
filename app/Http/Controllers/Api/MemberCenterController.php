@@ -64,7 +64,7 @@ class MemberCenterController extends Controller
 
         $value = request('value','');
 
-        $arr = ['sex', 'birthday', 'nick_name', 'user_name'];
+        $arr = ['sex', 'birthday', 'nick_name', 'user_name', 'photo'];
 
         if (!in_array($type, $arr)) {
             return api_response(201, [], '参数错误');
@@ -83,6 +83,9 @@ class MemberCenterController extends Controller
             case 'user_name':
                 if (empty($value)) return api_response(201, [], '请填写姓名');
                 break;
+            case 'photo':
+                $preg = "/^http(s)?:\\/\\/.+/";
+                if (preg_match($preg, $value) === false) return api_response(201, [], '头像格式错误');
         }
 
         $user = auth()->user();
