@@ -2,14 +2,21 @@
 namespace App\Services;
 
 use App\Models\CouponCode;
+use App\Models\MemberCoupon;
 
 class CouponService
 {
     protected $coupon;
 
-    public function __construct(CouponCode $code)
+    protected $memberCoupon;
+
+    public function __construct(
+        CouponCode $code,
+        MemberCoupon $memberCoupon
+    )
     {
         $this->coupon = $code;
+        $this->memberCoupon = $memberCoupon;
     }
 
     /**
@@ -32,5 +39,68 @@ class CouponService
             ->get(['id', 'name', 'code', 'type', 'value', 'use_type', 'is_limit_time', 'use_type_id', 'min_amount', 'before_time', 'after_time']);
 
         return $list;
+    }
+
+    /**
+     * @param array $data
+     * @return MemberCoupon|\Illuminate\Database\Eloquent\Model
+     * @author zhenhong~
+     * 创建用户优惠券
+     */
+    public function createMemberCoupon(array $data)
+    {
+        return $this->memberCoupon::create($data);
+    }
+
+    /**
+     * @param $memberId
+     * @param $type
+     * @param int $limit
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @author zhenhong~
+     * 获取用户优惠券列表（个人中心）
+     */
+    public function getMemberCouponListByMemberId($memberId, $type, $limit = 10)
+    {
+        $list = $this->memberCoupon::query()
+            ->with('coupon:id,type,name,value,use_type,is_limit_time,use_type_id,min_amount,before_time,after_time')
+            ->where('use_status', $type)
+            ->where('member_id', $memberId)
+            ->paginate($limit);
+
+        return $list;
+    }
+
+    /**
+     * @param $id
+     * @return CouponCode|CouponCode[]|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     * @author zhenhong~
+     * 根据ID获取优惠券
+     */
+    public function findCouponById($id)
+    {
+       return $this->coupon::query()->where('enable', 1)->find($id);
+    }
+
+    /**
+     * @param $couponId
+     * @return int
+     * @author zhenhong~
+     * 减优惠券总量
+     */
+    public function decrementCouponTotalNumber($couponId)
+    {
+        return $this->coupon::query()->where('id', $couponId)->decrement('total', 1);
+    }
+
+    /**
+     * @param $couponId
+     * @return int
+     * @author zhenhong~
+     * 增加优惠券使用量
+     */
+    public function IncrementCouponUseNumber($couponId)
+    {
+        return $this->coupon::query()->where('id', $couponId)->increment('used', 1);
     }
 }

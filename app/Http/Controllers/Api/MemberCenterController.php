@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\CouponService;
 use App\Services\MemberService;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,7 @@ class MemberCenterController extends Controller
      * @author zhenhong~
      * 设置用户基本资料
      */
-    public function setBaseMemberInfo(Request $request,MemberService $service)
+    public function setBaseMemberInfo(MemberService $service)
     {
         $type = request('type');
 
@@ -97,5 +98,29 @@ class MemberCenterController extends Controller
         } else {
             return api_response(201, [], '设置失败');
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param CouponService $couponService
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 获取用户优惠券
+     */
+    public function getMemberCouponList(Request $request, CouponService $couponService)
+    {
+        $member = auth()->user();
+
+        $type = $request->get('type', 1);
+
+        $perPage = $request->get('per_page', 10);
+
+        $list = $couponService->getMemberCouponListByMemberId($member->id, $type, $perPage);
+
+        return api_response(200, [
+            'list' => $list->items(),
+            'total' => $list->total(),
+            'last_page' => $list->lastPage()
+        ], '获取成功');
     }
 }

@@ -69,6 +69,8 @@ Route::namespace('Api')->group(function () {
         Route::get('getMemberInfo', 'MemberCenterController@getMemberInfo');
         //  设置用户基础信息
         Route::post('setBaseMemberInfo', 'MemberCenterController@setBaseMemberInfo');
+        //  获取用户优惠券
+        Route::get('getMemberCouponList', 'MemberCenterController@getMemberCouponList');
     });
     /********************** 个人中心 end **************************/
 
@@ -88,7 +90,15 @@ Route::namespace('Api')->group(function () {
             Route::put('updateCartProductNumber', 'ProductController@updateCartProductNumber');
         });
     });
-
-
     /********************** 商品 end **************************/
+
+    /********************** 用户 start **************************/
+    Route::group([
+        'prefix' => 'member',
+        'middleware' => 'jwt'
+    ], function () {
+        //  领取优惠券
+        Route::post('getCoupon', 'MemberController@getCoupon');
+    });
+    /********************** 用户 end ***************************/
 });
