@@ -11,6 +11,7 @@ use App\Services\CouponService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductController extends Controller
@@ -36,9 +37,18 @@ class ProductController extends Controller
 
         $coupons = $couponService->getCanUseCouponListByProduct($info);
 
+        $memberCouponIds = Auth::check() ? $couponService->pluckAlreadyUsedMemberCouponIds(Auth::id(), 1, 2)->toArray() : [];
+
         if ($coupons) {
-            $coupons->map(function ($item) {
+            $coupons->map(function ($item) use ($memberCouponIds) {
                 $item->time_show = $item->is_limit_time ? Carbon::parse($item->before_time)->toDateString() . ' -- ' . Carbon::parse($item->after_time)->toDateString() : '无时间限制';
+
+                //  is_collect-已领取 false-未领取
+                if (empty($memberCouponIds)) {
+                    $item->is_collect = true;
+                } else {
+                    $item->is_collect = in_array($item->id, $memberCouponIds) ? true : false;
+                }
 
                 return $item;
             });

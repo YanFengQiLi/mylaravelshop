@@ -9,10 +9,5 @@ class TestController extends Controller
 {
     public function createAdminMessage()
     {
-      return AdminMessage::create([
-          'type' => 1,
-          'title' => '222333',
-          'extra' => '121212'
-      ]);
     }
 }

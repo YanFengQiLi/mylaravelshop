@@ -81,7 +81,7 @@ Route::namespace('Api')->group(function () {
     /********************** 商品 start **************************/
     Route::group(['prefix' => 'product'], function () {
         //  商品详情
-        Route::get('getProductDetail', 'ProductController@getProductDetail');
+        Route::get('getProductDetail', 'ProductController@getProductDetail')->middleware('checkAuth');
 
         Route::group(['middleware' => 'jwt'], function () {
             //  添加商品到购物车

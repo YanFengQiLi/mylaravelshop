@@ -103,4 +103,19 @@ class CouponService
     {
         return $this->coupon::query()->where('id', $couponId)->increment('used', 1);
     }
+
+    /**
+     * @param $memberId
+     * @param $status
+     * @return \Illuminate\Support\Collection
+     * @author zhenhong~
+     * 获取用户已经使用的优惠券Ids
+     * (逻辑：对于已经用A券成功付款，再次进入商品详情页领A券是允许的，而对于领券后未使用/使用A券结算商品生成订单未付款的商品，都是不能再次领券的)
+     */
+    public function pluckAlreadyUsedMemberCouponIds($memberId, ...$status)
+    {
+        return $this->memberCoupon::query()->where('overdue', 0)
+            ->where('member_id', $memberId)
+            ->whereIn('use_status', $status)->pluck('id');
+    }
 }
