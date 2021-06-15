@@ -116,6 +116,6 @@ class CouponService
     {
         return $this->memberCoupon::query()->where('overdue', 0)
             ->where('member_id', $memberId)
-            ->whereIn('use_status', $status)->pluck('id');
+            ->whereIn('use_status', $status)->pluck('coupon_code_id');
     }
 }

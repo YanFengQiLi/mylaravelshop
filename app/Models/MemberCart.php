@@ -37,7 +37,7 @@ class MemberCart extends Model
      * @return int
      * 增加购物车商品数量
      */
-    public function IncMemberCartNumber(array $where, int $number)
+    public function incMemberCartNumber(array $where, int $number)
     {
         return self::query()->where($where)->increment('number', $number);
     }
@@ -51,5 +51,15 @@ class MemberCart extends Model
     public function decMemberCartNumber(array $where, int $number)
     {
         return self::query()->where($where)->decrement('number', $number);
+    }
+
+    /**
+     * @param array $where
+     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
+     * 获取一条购物车信息
+     */
+    public function getMemberCartInfo(array $where)
+    {
+        return self::query()->with('productSku', 'productSku.product')->where($where)->first();
     }
 }

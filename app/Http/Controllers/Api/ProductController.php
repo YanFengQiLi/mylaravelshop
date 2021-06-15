@@ -45,7 +45,7 @@ class ProductController extends Controller
 
                 //  is_collect-已领取 false-未领取
                 if (empty($memberCouponIds)) {
-                    $item->is_collect = true;
+                    $item->is_collect = false;
                 } else {
                     $item->is_collect = in_array($item->id, $memberCouponIds) ? true : false;
                 }
@@ -85,12 +85,21 @@ class ProductController extends Controller
     {
         $data = $memberCartRequest->validated();
 
-        $member = request()->attributes->get('member');
-
-        $obj = $memberCart->createMemberCart($data + ['member_id' => $member->id]);
+        $obj = $memberCart->createMemberCart($data + ['member_id' => Auth::id()]);
 
         if ($obj) {
-            return api_response(200, [], '添加成功');
+            $info = $memberCart->getMemberCartInfo(['id' => $obj->id]);
+
+            return api_response(200, [
+                'id' => $info->id,
+                'product_sku_id' => $info->product_sku_id,
+                'product_id' => $info->productSku->product_id,
+                'number' => $info->number,
+                'title' => $info->productSku->title,
+                'price' => $info->productSku->price,
+                'img' => $info->productSku->img,
+                'product_name' => $info->productSku->product->title
+            ], '添加成功');
         } else {
             return api_response(201, [], '添加失败');
         }
@@ -120,7 +129,7 @@ class ProductController extends Controller
 
         switch ($type) {
             case 'add':
-                $int = $memberCart->IncMemberCartNumber([
+                $int = $memberCart->incMemberCartNumber([
                     'member_id' => $member->id,
                     'product_sku_id' => $data['product_sku_id']
                 ], $data['number']);
