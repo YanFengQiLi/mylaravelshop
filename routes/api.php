@@ -99,6 +99,8 @@ Route::namespace('Api')->group(function () {
     ], function () {
         //  领取优惠券
         Route::post('getCoupon', 'MemberController@getCoupon');
+        //  获取购物车列表
+        Route::get('getMemberCartList','MemberController@getMemberCartList');
     });
     /********************** 用户 end ***************************/
 });

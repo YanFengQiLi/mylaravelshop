@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\MemberCart;
 use App\Models\MemberCoupon;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
@@ -62,5 +63,35 @@ class MemberController extends Controller
 
             return api_response(201, [], $exception->getMessage());
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param MemberCart $memberCart
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 获取用户购物车列表
+     */
+    public function getMemberCartList(Request $request, MemberCart $memberCart)
+    {
+        $memberId = auth()->id();
+
+        $perPage = $request->get('per_page', 10);
+
+        $list = $memberCart->selectMemberCartList($memberId, $perPage);
+
+        if ($list->total() > 0) {
+            foreach ($list as $item) {
+                $item->title = $item->productSku->title;
+                $item->price = $item->productSku->price;
+                $item->img = $item->productSku->img;
+                $item->product_id = $item->productSku->product_id;
+                $item->product_name = $item->productSku->product->product_name;
+
+                unset($item->productSku);
+            }
+        }
+
+        return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
     }
 }

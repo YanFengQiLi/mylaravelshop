@@ -62,4 +62,22 @@ class MemberCart extends Model
     {
         return self::query()->with('productSku', 'productSku.product')->where($where)->first();
     }
+
+    /**
+     * @param $memberId
+     * @param int $limit
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * 获取用户购物车列表
+     */
+    public function selectMemberCartList($memberId, $limit = 10)
+    {
+        return self::query()->select('id', 'product_sku_id', 'number')->with([
+            'productSku' => function ($query) {
+                $query->select('id', 'title', 'price', 'img', 'product_id');
+            },
+            'productSku.product' => function($query) {
+                $query->select('id', 'title AS product_name');
+            }
+        ])->where('member_id', $memberId)->paginate($limit);
+    }
 }
