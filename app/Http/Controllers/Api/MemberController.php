@@ -7,6 +7,7 @@ use App\Models\MemberCart;
 use App\Models\MemberCoupon;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -74,7 +75,7 @@ class MemberController extends Controller
      */
     public function getMemberCartList(Request $request, MemberCart $memberCart)
     {
-        $memberId = auth()->id();
+        $memberId = Auth::id();
 
         $perPage = $request->get('per_page', 10);
 
