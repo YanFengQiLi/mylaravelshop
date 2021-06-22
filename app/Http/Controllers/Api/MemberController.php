@@ -95,4 +95,9 @@ class MemberController extends Controller
 
         return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
     }
+
+    public function getMemberFavoriteProductsList()
+    {
+
+    }
 }
