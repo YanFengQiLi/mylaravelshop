@@ -101,6 +101,12 @@ Route::namespace('Api')->group(function () {
         Route::post('getCoupon', 'MemberController@getCoupon');
         //  获取购物车列表
         Route::get('getMemberCartList','MemberController@getMemberCartList');
+        //  关注商品
+        Route::post('createMemberFavoriteProduct', 'MemberController@createMemberFavoriteProduct');
+        //  取消关注的商品
+        Route::post('cancelMemberFavoriteProduct','MemberController@cancelMemberFavoriteProduct');
+        //  关注的商品列表
+        Route::get('getMemberFavoriteProductsList','MemberController@getMemberFavoriteProductsList');
     });
     /********************** 用户 end ***************************/
 });

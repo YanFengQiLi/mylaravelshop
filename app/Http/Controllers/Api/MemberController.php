@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\MemberCart;
 use App\Models\MemberCoupon;
+use App\Models\MemberFavoriteProduct;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +95,19 @@ class MemberController extends Controller
         }
 
         return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
+    }
+
+
+    public function createMemberFavoriteProduct(Request $request, MemberFavoriteProduct $memberFavoriteProduct)
+    {
+        $memberId = Auth::id();
+
+        $productId = $request->post('product_id');
+    }
+
+    public function cancelMemberFavoriteProduct()
+    {
+
     }
 
     public function getMemberFavoriteProductsList()

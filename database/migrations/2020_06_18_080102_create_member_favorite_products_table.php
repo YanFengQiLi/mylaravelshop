@@ -25,6 +25,7 @@ class CreateMemberFavoriteProductsTable extends Migration
                 'product_id'
             ]);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
