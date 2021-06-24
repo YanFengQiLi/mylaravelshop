@@ -27,26 +27,27 @@ class MemberFavoriteProduct extends Model
     }
 
     /**
+     * @param $memberId
      * @param $ids
      * @return int
      * 移除商品收藏（关注）
      */
-    public function deleteMemberFavoriteProduct(...$ids)
+    public function deleteMemberFavoriteProduct($memberId, ...$ids)
     {
-        return self::destroy($ids);
+        return self::query()->where('member_id', $memberId)->whereIn('product_id', $ids)->delete();
     }
 
     /**
-     * @param $id       - ID
+     * @param $where    - 查询条件
      * @param $idDelete - 是否包含已删除的
      * @return bool
      * 校验是否已收藏（关注）过该商品
      */
-    public function checkMemberFavoriteProductIsExist($id, $idDelete = false)
+    public function checkMemberFavoriteProductIsExist(array $where, $idDelete = false)
     {
         $model = $idDelete ? self::query() : self::withTrashed();
 
-        return $model->where('id', $id)->exists();
+        return $model->where($where)->exists();
     }
 
     /**

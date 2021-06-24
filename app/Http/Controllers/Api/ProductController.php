@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberCartRequest;
 use App\Models\MemberCart;
+use App\Models\MemberFavoriteProduct;
 use App\Models\ProductsService;
 use App\Models\Website;
 use App\Services\CouponService;
@@ -28,7 +29,8 @@ class ProductController extends Controller
         ProductService $productService,
         CouponService $couponService,
         Website $website,
-        Request $request
+        Request $request,
+        MemberFavoriteProduct $memberFavoriteProduct
     )
     {
         $id = $request->get('id');
@@ -37,7 +39,18 @@ class ProductController extends Controller
 
         $coupons = $couponService->getCanUseCouponListByProduct($info);
 
-        $memberCouponIds = Auth::check() ? $couponService->pluckAlreadyUsedMemberCouponIds(Auth::id(), 1, 2)->toArray() : [];
+        $memberCouponIds = [];
+
+        //  关注商品标识
+        $isFavorite = false;
+
+        if (Auth::check()) {
+            $memberId = Auth::id();
+
+            $memberCouponIds = $couponService->pluckAlreadyUsedMemberCouponIds($memberId, 1, 2)->toArray();
+
+            $isFavorite = $memberFavoriteProduct->checkMemberFavoriteProductIsExist(['member_id' => $memberId, 'product_id' => $id]);
+        }
 
         if ($coupons) {
             $coupons->map(function ($item) use ($memberCouponIds) {
@@ -53,6 +66,9 @@ class ProductController extends Controller
                 return $item;
             });
         }
+
+        //  是否关注
+        $info->is_favorite = $isFavorite;
 
         $info->coupon_list = $coupons;
 

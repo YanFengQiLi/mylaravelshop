@@ -97,21 +97,67 @@ class MemberController extends Controller
         return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
     }
 
-
+    /**
+     * @param Request $request
+     * @param MemberFavoriteProduct $memberFavoriteProduct
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 添加商品关注
+     */
     public function createMemberFavoriteProduct(Request $request, MemberFavoriteProduct $memberFavoriteProduct)
     {
         $memberId = Auth::id();
 
         $productId = $request->post('product_id');
+
+        if (empty($productId)) return api_response(201, [], '参数错误');
+
+        $model = $memberFavoriteProduct->insertMemberFavoriteProduct(['member_id' => $memberId, 'product_id' => $productId]);
+
+        if ($model) {
+            return api_response(200, [], '关注成功');
+        } else {
+            return api_response(201, [], '关注失败');
+        }
     }
 
-    public function cancelMemberFavoriteProduct()
+    /**
+     * @param Request $request
+     * @param MemberFavoriteProduct $memberFavoriteProduct
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 取消商品关注
+     */
+    public function cancelMemberFavoriteProduct(Request $request, MemberFavoriteProduct $memberFavoriteProduct)
     {
+        $ids = $request->post('product_id','');
 
+        if (!is_string($ids) || empty($ids)) return api_response(201, [], '参数错误');
+
+        $num = $memberFavoriteProduct->deleteMemberFavoriteProduct(Auth::id(), $ids);
+
+        if ($num > 0) {
+            return api_response(200, [], '取关成功');
+        } else {
+            return api_response(201, [], '取关失败');
+        }
     }
 
-    public function getMemberFavoriteProductsList()
+    /**
+     * @param Request $request
+     * @param MemberFavoriteProduct $memberFavoriteProduct
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 获取用户关注的商品列表
+     */
+    public function getMemberFavoriteProductsList(Request $request, MemberFavoriteProduct $memberFavoriteProduct)
     {
+        $memberId = Auth::id();
 
+        $perPage = $request->get('per_page', 10);
+
+        $list = $memberFavoriteProduct->selectMemberFavoriteProductList($memberId, $perPage);
+
+        return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
     }
 }
