@@ -11,6 +11,8 @@ class MemberFavoriteProduct extends Model
 
     protected $table = 'member_favorite_products';
 
+    protected $fillable = ['member_id', 'product_id'];
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id','id');
@@ -32,7 +34,7 @@ class MemberFavoriteProduct extends Model
      * @return int
      * 移除商品收藏（关注）
      */
-    public function deleteMemberFavoriteProduct($memberId, ...$ids)
+    public function deleteMemberFavoriteProduct($memberId, array $ids)
     {
         return self::query()->where('member_id', $memberId)->whereIn('product_id', $ids)->delete();
     }
@@ -45,14 +47,14 @@ class MemberFavoriteProduct extends Model
      */
     public function checkMemberFavoriteProductIsExist(array $where, $idDelete = false)
     {
-        $model = $idDelete ? self::query() : self::withTrashed();
+        $model = $idDelete ? self::withTrashed() : self::query();
 
         return $model->where($where)->exists();
     }
 
     /**
-     * @param $memberId
-     * @param $limit
+     * @param $memberId - 用户ID
+     * @param $limit    - 分页条数
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      * 用户收藏（关注）列表
      */
@@ -61,6 +63,18 @@ class MemberFavoriteProduct extends Model
         return self::query()->with('product:id,title,image,price')
             ->select(['id', 'product_id'])
             ->paginate($limit);
+    }
+
+    /**
+     * @param array $where  - 查询条件
+     * @return bool|null
+     * 恢复删除的一条关注
+     */
+    public function restoreMemberFavoriteProduct(array $where)
+    {
+        $model = self::onlyTrashed()->where($where)->first();
+
+        return $model->restore();
     }
 
 }

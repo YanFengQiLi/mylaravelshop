@@ -112,7 +112,15 @@ class MemberController extends Controller
 
         if (empty($productId)) return api_response(201, [], '参数错误');
 
-        $model = $memberFavoriteProduct->insertMemberFavoriteProduct(['member_id' => $memberId, 'product_id' => $productId]);
+        $where = ['member_id' => $memberId, 'product_id' => $productId];
+
+        $is = $memberFavoriteProduct->checkMemberFavoriteProductIsExist($where, true);
+
+        if ($is) {
+            $model = $memberFavoriteProduct->restoreMemberFavoriteProduct($where);
+        } else {
+            $model = $memberFavoriteProduct->insertMemberFavoriteProduct($where);
+        }
 
         if ($model) {
             return api_response(200, [], '关注成功');
@@ -134,7 +142,7 @@ class MemberController extends Controller
 
         if (!is_string($ids) || empty($ids)) return api_response(201, [], '参数错误');
 
-        $num = $memberFavoriteProduct->deleteMemberFavoriteProduct(Auth::id(), $ids);
+        $num = $memberFavoriteProduct->deleteMemberFavoriteProduct(Auth::id(), explode(',', $ids));
 
         if ($num > 0) {
             return api_response(200, [], '取关成功');
