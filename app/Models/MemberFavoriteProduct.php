@@ -2,9 +2,34 @@
 
 namespace App\Models;
 
+use App\Events\AttentionProductLowerPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\MemberFavoriteProduct
+ *
+ * @property int $id
+ * @property int $member_id 用户ID
+ * @property int $product_id 产品ID
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Product $product
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\MemberFavoriteProduct onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereMemberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberFavoriteProduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\MemberFavoriteProduct withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\MemberFavoriteProduct withoutTrashed()
+ * @mixin \Eloquent
+ */
 class MemberFavoriteProduct extends Model
 {
     use SoftDeletes;
@@ -17,6 +42,10 @@ class MemberFavoriteProduct extends Model
     {
         return $this->belongsTo(Product::class, 'product_id','id');
     }
+
+    protected $dispatchesEvents = [
+        'created' => AttentionProductLowerPrice::class
+    ];
 
     /**
      * @param array $data
@@ -61,6 +90,7 @@ class MemberFavoriteProduct extends Model
     public function selectMemberFavoriteProductList($memberId, $limit)
     {
         return self::query()->with('product:id,title,image,price')
+            ->where('member_id', $memberId)
             ->select(['id', 'product_id'])
             ->paginate($limit);
     }

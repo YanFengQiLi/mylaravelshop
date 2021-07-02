@@ -5,12 +5,12 @@ namespace App\Models;
 /**
  * App\Models\Category
  *
- * @author zhenhong~
- * @description 商品分类模型
  * @property int $id
  * @property int $parent_id 父级ID
  * @property int $order 排序
  * @property string $title 分类标题
+ * @property string|null $icon 图标
+ * @property int $is_index_show 是否设置为首页显示 0-否 1-是
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $children
@@ -21,14 +21,14 @@ namespace App\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered($direction = 'asc')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIsIndexShow($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property int|null $deep 层级深度
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereDeep($value)
  */
 
 use Dcat\Admin\Traits\ModelTree;

@@ -12,28 +12,37 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * App\Models\Member
  *
  * @property int $id
- * @property string $account 账号-手机号
- * @property string $email 邮箱
- * @property string $password 密码
- * @property string $user_name 姓名
- * @property string $nick_name 昵称
- * @property int $sex 性别 1-男 2-女
- * @property int $photo 头像
+ * @property string|null $account 账号-手机号
+ * @property string|null $email 邮箱
+ * @property string|null $password 密码
+ * @property string|null $user_name 姓名
+ * @property string|null $nick_name 昵称
+ * @property int $sex 性别 0-女 1-男
+ * @property string|null $photo 头像
  * @property int $status 状态 0-冻结 1-正常
  * @property int $integral 积分
+ * @property int $balance 余额
+ * @property int $is_super 超级会员
+ * @property string|null $birthday 生日
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member newQuery()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Member onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member status()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereAccount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereBirthday($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereIntegral($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereIsSuper($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member whereNickName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member wherePhoto($value)
@@ -44,9 +53,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Member withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Member withoutTrashed()
  * @mixin \Eloquent
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Member status()
  */
 class Member extends Authenticatable implements JWTSubject
 {

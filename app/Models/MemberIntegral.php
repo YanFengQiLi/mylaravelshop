@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $num 积分数量
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Member $member
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral query()
@@ -26,7 +27,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberIntegral whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \App\Models\Member $member
  */
 class MemberIntegral extends Model
 {

@@ -107,6 +107,10 @@ Route::namespace('Api')->group(function () {
         Route::post('cancelMemberFavoriteProduct','MemberController@cancelMemberFavoriteProduct');
         //  关注的商品列表
         Route::get('getMemberFavoriteProductsList','MemberController@getMemberFavoriteProductsList');
+        //  订阅商品降价通知
+        Route::post('createMemberSubscribeProduct', 'MemberController@createMemberSubscribeProduct');
+        //  取消订阅商品降价通知
+        Route::post('cancelMemberSubscribeProduct','MemberController@cancelMemberSubscribeProduct');
     });
     /********************** 用户 end ***************************/
 });

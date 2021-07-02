@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\MemberCart;
 use App\Models\MemberCoupon;
 use App\Models\MemberFavoriteProduct;
+use App\Models\MemberSubscribeProduct;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * 会员控制器
@@ -167,5 +169,60 @@ class MemberController extends Controller
         $list = $memberFavoriteProduct->selectMemberFavoriteProductList($memberId, $perPage);
 
         return api_response(200, ['list' => $list->items(), 'total' => $list->total(), 'last_page' => $list->lastPage()], '获取成功');
+    }
+
+    /**
+     * @param Request $request
+     * @param MemberSubscribeProduct $memberSubscribeProduct
+     * @return \Illuminate\Http\JsonResponse
+     * @author zhenhong~
+     * 订阅商品降价通知
+     */
+    public function createMemberSubscribeProduct(Request $request, MemberSubscribeProduct $memberSubscribeProduct)
+    {
+        $memberId = Auth::id();
+
+        $productId = $request->post('product_id');
+
+        if (empty($productId)) return api_response(201, [], '参数错误');
+
+        $where = ['member_id' => $memberId, 'product_id' => $productId];
+
+        $is = $memberSubscribeProduct->checkMemberSubscribeProductIsExist($where, true);
+
+        if ($is) {
+            $result = $memberSubscribeProduct->restoreMemberSubscribeProduct($where);
+        } else {
+            $result = $memberSubscribeProduct->insertMemberSubscribeProduct($where);
+        }
+
+        if ($result) {
+            return api_response(200, [], '订阅成功');
+        } else {
+            return api_response(201, [], '订阅失败');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param MemberSubscribeProduct $memberSubscribeProduct
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @author zhenhong~
+     * 取消订阅商品降价通知
+     */
+    public function cancelMemberSubscribeProduct(Request $request, MemberSubscribeProduct $memberSubscribeProduct)
+    {
+        $productId = $request->post('product_id','');
+
+        if (empty($productId)) return api_response(201, [], '参数错误');
+
+        $res = $memberSubscribeProduct->deleteMemberSubscribeProduct(Auth::id(), $productId);
+
+        if (is_bool($res) && $res === true) {
+            return api_response(200, [], '取关成功');
+        } else {
+            return api_response(201, [], '取关失败');
+        }
     }
 }

@@ -5,6 +5,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ProductsService
+ *
+ * @property int $id
+ * @property string $icon 小图标
+ * @property string $title 服务名称
+ * @property string $content 描述
+ * @property int $status 0-禁用 1-启用
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProductsService whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class ProductsService extends Model
 {
 

@@ -99,6 +99,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        //  关于商品降价相关的日志
+        'product_lower_price' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/product_lower_price.log'),
+        ]
     ],
 
 ];

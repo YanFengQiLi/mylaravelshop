@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $title 广告名称
  * @property int $type 广告类型
- * @property string $links 链接地址
+ * @property string|null $links 链接地址
  * @property int $status 状态 1-启用 0-禁用
  * @property string|null $image 图片地址
  * @property int $sort 排序

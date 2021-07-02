@@ -36,6 +36,8 @@ class CreateProductsTable extends Migration
             $table->tinyInteger('is_join_vip')->default(0)->comment('是否参与 vip 年卡活动,0-否 1-是');
             $table->tinyInteger('is_join_integral')->default(0)->comment('是否参与下单得积分活动,0-否 1-是');
             $table->string('service')->nullable()->comment('商品服务');
+            $table->decimal('lower_price')->nullable()->comment('降价金额');
+            $table->tinyInteger('is_lower')->default(0)->comment('是否降价 0-否 1-是');
             $table->timestamps();
         });
     }

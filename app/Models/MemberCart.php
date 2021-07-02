@@ -4,6 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\MemberCart
+ *
+ * @property int $id
+ * @property int $member_id 用户ID
+ * @property int $product_sku_id 商品skuID
+ * @property int $number 数量
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\ProductSku $productSku
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereMemberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereProductSkuId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\MemberCart whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MemberCart extends Model
 {
     protected $table = 'member_carts';
