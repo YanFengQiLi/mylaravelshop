@@ -28,9 +28,10 @@ class EventServiceProvider extends ServiceProvider
          */
         //  注册事件和监听器，定义好事件和事件监听器的路径，直接使用 `php artisan make:generate`，就会生成该事件和事件的全部监听器
         'App\Events\ProductUpdated' => [
+            //  设置降价标识
             'App\Listeners\ChangeProductLowerColumn',
-            //  减价通知
-            //'App\Listeners\LowerPriceNotification',
+            //  降价价通知
+            'App\Listeners\LowerPriceNotification',
         ],
     ];
 

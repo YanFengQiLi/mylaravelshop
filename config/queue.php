@@ -62,10 +62,9 @@ return [
             'driver' => 'redis',
             'connection' => env('QUEUE_REDIS_CONNECTION','default'),    //  redis 连接, 对应 config/database.php 的 redis 数据库连接
             'queue' => env('REDIS_QUEUE', 'default'),                   //  队列名称
-            'retry_after' => 90,   //   单位：秒  指定队列连接在重试一个任务前应该等它执行多久(任务在执行了 x 秒后将会被放回队列而不是删除它), 一般情况下,设置为你认为你的任务可能会执行需要最长时间的值
+            'retry_after' => 5,   //   单位：秒  指定队列连接在重试一个任务前应该等它执行多久(任务在执行了 x 秒后将会被放回队列而不是删除它), 一般情况下,设置为你认为你的任务可能会执行需要最长时间的值
             'block_for' => null,   //   驱动应该在将任务重新放入 Redis 数据库以及处理器轮询之前阻塞多久
         ],
-
     ],
 
     /*
