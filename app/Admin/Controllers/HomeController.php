@@ -86,17 +86,21 @@ class HomeController extends Controller
             '12' => '最近1年'
         ];
 
+        $clickClass = $boxId;
+
+        $clickClassName = '.' . $boxId;
+
         $dropdown = Dropdown::make($options)
             ->button(current($options))
             ->click()
-            ->map(function ($item, $index) use ($option) {
-                return "<a class='switch-bar' data-{$option}='{$index}'>{$item}</a>";
+            ->map(function ($item, $index) use ($option, $clickClass) {
+                return "<a class={$clickClass} data-{$option}='{$index}'>{$item}</a>";
             });
 
         $bar = $chart::make()
             ->fetching('$("#my-box").loading()') // 设置loading效果
             ->fetched('$("#my-box").loading(false)') // 移除loading效果
-            ->click('.switch-bar'); // 设置图表点击菜单则重新发起请求，且被点击的目标元素上的 data-xxx 属性会被作为post数据发送到后端API
+            ->click($clickClassName); // 设置图表点击菜单则重新发起请求，且被点击的目标元素上的 data-xxx 属性会被作为post数据发送到后端API
 
         return Box::make($title, $bar)
             ->id($boxId) // 设置盒子的ID
